@@ -1,0 +1,22 @@
+data = {
+	objections: [{
+		type: null,
+		question_list: [],
+		right_comment: "",
+		wrong_comment: ""
+	}],
+	clients: [{
+		name: ""
+		loyalty: null,
+		objections_list: [],
+		introduction_text: "",
+		closing_objection: "",
+		question_list: [],
+		right_closing_text: "",
+		wrong_closing_text: ""
+	}],
+	questions: [{
+		wrong_answer_type: null
+	}]
+
+}

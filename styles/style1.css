@@ -1,0 +1,37 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+#header {
+	height: 64px;
+	padding: 2px 0;
+}
+#logo {
+	height: 60px;
+}
+.column {
+	margin-left: 0.25%;
+	margin-right: 0.25%;
+	width: 49.5%;
+	float: left;
+}
+.rectange {
+	background-color: #E1DFE0;
+	width: 90%;
+}
+.row {
+	height: 100%;
+	background: -webkit-gradient(linear, center top, center bottom, color-stop(0%,#C2C2C2), color-stop(100%,#EBEBEB ));
+	background: -moz-linear-gradient(top, #C2C2C2, #EBEBEB );
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#C2C2C2', endColorstr='#EBEBEB');
+}
+#questions {
+	overflow: auto;
+	list-style-type: none;
+}
+
+@media only screen and (max-width : 800px) {
+
+
+
+}
