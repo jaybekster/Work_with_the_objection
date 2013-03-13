@@ -72,7 +72,7 @@ if (!Math.roundTo) {
 		var x = Math.pow(10, count);
 		num*=x;
 		return Math.round(num)/x;
-	}	
+	}
 }
 
 if (!Array.prototype.forEach) {
@@ -111,11 +111,11 @@ if (!Array.prototype.map) {
       k++;
     }
     return A;
-  }   
+  }
 }
 if (!Object.prototype.method) {
 	Object.prototype.method = function method(name, func) {
-		return !this.prototype[name] ? this.prototype[name] = func : false; 
+		return !this.prototype[name] ? this.prototype[name] = func : false;
 	}
 }
 
@@ -137,6 +137,11 @@ jQuery.fn.leftclick = function ( data, fn ) { //left click jQuery event hamdler 
 	}
 	return arguments.length > 0 ? this.on( name, null, data, func ) : this.trigger( name );
 }
+
+
+}
+
+})()
 
 function getRandomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -160,7 +165,3 @@ function generateArrayRandomNumber (min, len) {
 	}
 	return arrayRandomNumbers;
 }
-
-}
-
-})()

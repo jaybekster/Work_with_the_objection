@@ -13,7 +13,7 @@ body {
 *{
       -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;  
+  box-sizing: border-box;
 
  /*          -webkit-transition: all 0.2s ease;
      -moz-transition: all 0.2s ease;
@@ -203,7 +203,7 @@ background: #E6E7E9;
   background: url("../img/RS-30.png");
 }
 
-.responce {
+#introduction_text {
   border:1px solid #c2c2c2;
   background: #fff;
   padding:15px;
@@ -450,7 +450,7 @@ cursor:pointer;
     font-weight: normal;
     font-style: normal;
     font-family: 'RaphaelIcons';
-    
+
 }
 .giveprod {
   cursor: pointer;
@@ -533,7 +533,7 @@ cursor:pointer;
   cursor: pointer;
   width: 273px;
   height: 66px;
-  background: url("../img/RS-104.png"); 
+  background: url("../img/RS-104.png");
 }
 #continue_course:hover {
   background: url("../img/RS-105.png");
@@ -548,7 +548,7 @@ cursor:pointer;
   float:left;
   width: 272px;
   height: 66px;
-  background: url("../img/RS-101.png"); 
+  background: url("../img/RS-101.png");
 }
 #close_course:hover {
   background: url("../img/RS-102.png");
