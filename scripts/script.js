@@ -40,8 +40,9 @@ data = {
 		loyalty: 4,
 		objections_list: [2,1,3,4],
 		introduction_text: "Приобретая нашу карту \"Банк в кармане\" Вы сможете оплачивать коммунальные платежи, а также любые интернет товары не выходя из дома, хотите оформим карту сейчас...",
-		closing_objection: "Если бы я действительно понял преимущества Вашей карты, я мог бы ей воспользоваться, но пока сомневаюсь...",
-		question_list: [],
+		closing_text: "Если бы я действительно понял преимущества Вашей карты, я мог бы ей воспользоваться, но пока сомневаюсь...",
+		final_questions: [1,2,3,4],
+		right_final_question: 1,
 		right_closing_text: "Конечно, с удовольствием узнаю подробности продукта",
 		wrong_closing_text: "Спасибо, но мне же необходимо уйти"
 	}],
@@ -80,18 +81,42 @@ data = {
 			wrong_answer_type: "excuse"
 		}
 	],
-	settings: {}
+	final_questions: [
+		{
+			id: 1,
+			text: "Раз вы действительно могли бы опробовать наш продукт, то я бы попросил уделить мне две минуты времени, за которые я расскажу о преимуществах нашего продукта"
+		}, {
+			id: 2,
+			text: "Ну ладно Вам, Вам все равно ничего не стоит попробовать наш продукт"
+		}, {
+			id: 3,
+			text: "Я работаю в Банке уже пять лет и гарантирую - наш продукт луче"
+		}, {
+			id: 4,
+			text: "Правильно! Как Вы можете понять преимущества не пользуясь картой: оформите и они будут для Вас очевидны"
+		}
+	],
+	settings: {
+		clients_count: 1,
+		objections_count: 3,
+		questions_count: null,
+		easy_mode: false
+	}
 }
 
 var clientsDB = TAFFY(data.clients),
 	objectionsDB = TAFFY(data.objections),
-	questionsDB = TAFFY(data.questions);
+	questionsDB = TAFFY(data.questions),
+	final_questionsDB = TAFFY(data.final_questions),
+	settings = data.settings;
 
 
 ClientClass = function(obj) {
-	this.step = 0;
+	this.step = 1;
+	this.loyalty = obj.loyalty;
 	this.name = obj.name;
 	this.introduction_text = obj.introduction_text;
+	this.closing_text = obj.closing_text;
 	this.objections = (function(objections_list) {
 		return objections_list.map(function(v, i) {
 			return objectionsDB({id:v}).first();
@@ -104,12 +129,20 @@ ClientClass = function(obj) {
 			return questionsDB({id:v}).first();
 		});
 	})();
+	this.final_questions = (function() {
+		return obj.final_questions.map(function(v, i) {
+			return final_questionsDB({id:v}).first();
+		})
+	})(obj);
+	this.right_final_question = obj.right_final_question;
 	this.wrong_answer_types = (function(self) {
 		return self.questions.map(function(v, i) {
 			return v.wrong_answer_type;
 		});
 	})(this);
 	this.right_answer = this.objection.right_answer;
+	this.right_closing_text = obj.right_closing_text;
+	this.wrong_closing_text = obj.wrong_closing_text;
 
 }
 ClientClass.getClientById = function(id) {
@@ -132,6 +165,9 @@ ClientClass.fn.init = function() {
 				break;
 			case "objection":
 				this.getObjection();
+				break;
+			case "loyalty":
+				$("#loyalty>span").html(this[i]);
 				break;
 		}
 	}
@@ -183,7 +219,26 @@ Client.init();
 
 $("#questions").on("click", "li", function() {
 	var qId = $(this).data("id");
+	if (Client.final===true) {
+		if (Client.right_final_question===qId) {
+			alert("WIN");
+		} else {
+			alert("LOOSE");
+		}
+		return;
+	}
 	$("#introduction_text").html( this.introduction_text = questionsDB({id:qId}).first().text );
+	if (Client.step===settings.objections_count) {
+		if (Client.right_answer==qId) {
+			Client.final = true;
+			Client.getQuestions( Client.final_questions );
+			$("#objection>span").html(Client.closing_text);
+		} else {
+			console.log("wrong")
+			//wrong
+		}
+		return;
+	}
 	Client.updateObjection(
 		(Client.right_answer==qId)?"reason":(questionsDB({id:qId}).first().wrong_answer_type)
 	).updateQuestions();
