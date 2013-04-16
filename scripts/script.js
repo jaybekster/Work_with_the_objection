@@ -98,7 +98,7 @@ data = {
 	],
 	settings: {
 		clients_count: 1,
-		objections_count: 3,
+		objections_count: 2,
 		questions_count: null,
 		easy_mode: false
 	}
@@ -112,6 +112,7 @@ var clientsDB = TAFFY(data.clients),
 
 
 ClientClass = function(obj) {
+	console.log(obj)
 	this.step = 1;
 	this.loyalty = obj.loyalty;
 	this.name = obj.name;
@@ -124,26 +125,27 @@ ClientClass = function(obj) {
 	})(obj.objections_list);
 	this.objection = objectionsDB({id:2}).first();
 	this.used_objections = [];
-	this.questions = (function() {
-		return objectionsDB({id:2}).first().question_list.map(function(v, i) {
+	this.questions = (function(objections) {
+
+		return objectionsDB({id:objections[0]}).first().question_list.map(function(v, i) {
 			return questionsDB({id:v}).first();
 		});
-	})();
+	})(obj.objections_list);
 	this.final_questions = (function() {
 		return obj.final_questions.map(function(v, i) {
 			return final_questionsDB({id:v}).first();
 		})
-	})(obj);
+	})();
 	this.right_final_question = obj.right_final_question;
 	this.wrong_answer_types = (function(self) {
 		return self.questions.map(function(v, i) {
 			return v.wrong_answer_type;
 		});
 	})(this);
+	this.right_answers_count = 0;
 	this.right_answer = this.objection.right_answer;
 	this.right_closing_text = obj.right_closing_text;
 	this.wrong_closing_text = obj.wrong_closing_text;
-
 }
 ClientClass.getClientById = function(id) {
 	var client = clientsDB({id: id}).first();
@@ -174,7 +176,7 @@ ClientClass.fn.init = function() {
 }
 ClientClass.fn.getQuestions = function(arr) {
 	var arr = arr || this.questions;
-	$("#questions").empty().append( z = arr.map(function(v, i) {
+	$("#questions").empty().append( arr.map(function(v, i) {
 		return "<li data-id='"+v.id+"'>"+v.text+"</li>";
 	}).join("") );
 	return this;
@@ -220,6 +222,7 @@ Client.init();
 $("#questions").on("click", "li", function() {
 	var qId = $(this).data("id");
 	if (Client.final===true) {
+		console.log("Client.final===true")
 		if (Client.right_final_question===qId) {
 			alert("WIN");
 		} else {
@@ -227,20 +230,22 @@ $("#questions").on("click", "li", function() {
 		}
 		return;
 	}
-	$("#introduction_text").html( this.introduction_text = questionsDB({id:qId}).first().text );
-	if (Client.step===settings.objections_count) {
-		if (Client.right_answer==qId) {
+	$("#introduction_text").html( Client.introduction_text = questionsDB({id:qId}).first().text );
+	if (Client.step===settings.objections_count) {	
+		if (Client.right_answer==qId) Client.right_answers_count++;
+		if (Client.right_answer==qId && Client.right_answers_count==Client.step) {
 			Client.final = true;
 			Client.getQuestions( Client.final_questions );
 			$("#objection>span").html(Client.closing_text);
+			alert("Верно.теперь переходим к финальному вопросу");
 		} else {
-			console.log("wrong")
+			console.log("Неверно, не перезодим к финальному вопросу")
 			//wrong
 		}
 		return;
 	}
 	Client.updateObjection(
-		(Client.right_answer==qId)?"reason":(questionsDB({id:qId}).first().wrong_answer_type)
+		(Client.right_answer==qId)?function(){Client.right_answers_count++; return "reason";}():(questionsDB({id:qId}).first().wrong_answer_type)
 	).updateQuestions();
 	Client.getObjection().getQuestions();
 	Client.step+=1;
