@@ -465,18 +465,6 @@ cursor:pointer;
 .giveprod.active {
   background: url("../img/offer_active.png");
 }
-#status>div {
-  margin: 0 auto;
-  width: 163px;
-  height: 41px;
-  background: url("../img/status.png");
-}
-#status>div:hover {
-  background: url("../img/status_hover.png");
-}
-#status>div.active {
-  background: url("../img/status_active.png");
-}
 #clock {
   width: 18px;
   height: 30px;
