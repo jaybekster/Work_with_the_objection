@@ -38,7 +38,20 @@ data = {
 		id: 1,
 		name: "Иванов Иван Иванович",
 		loyalty: 4,
-		objections_list: [2,1,3,4],
+		//objections_list: [2,1,3,4],
+		objections_list: [1,2,3,4],
+		introduction_text: "Приобретая нашу карту \"Банк в кармане\" Вы сможете оплачивать коммунальные платежи, а также любые интернет товары не выходя из дома, хотите оформим карту сейчас...",
+		closing_text: "Если бы я действительно понял преимущества Вашей карты, я мог бы ей воспользоваться, но пока сомневаюсь...",
+		final_questions: [1,2,3,4],
+		right_final_question: 1,
+		right_closing_text: "Конечно, с удовольствием узнаю подробности продукта",
+		wrong_closing_text: "Спасибо, но мне же необходимо уйти"
+	},
+	{
+		id: 2,
+		name: "Сергеева Нина Ивановна",
+		loyalty: 3,
+		objections_list: [1,2,3,4],
 		introduction_text: "Приобретая нашу карту \"Банк в кармане\" Вы сможете оплачивать коммунальные платежи, а также любые интернет товары не выходя из дома, хотите оформим карту сейчас...",
 		closing_text: "Если бы я действительно понял преимущества Вашей карты, я мог бы ей воспользоваться, но пока сомневаюсь...",
 		final_questions: [1,2,3,4],
@@ -110,7 +123,6 @@ var clientsDB = TAFFY(data.clients),
 	final_questionsDB = TAFFY(data.final_questions),
 	settings = data.settings;
 
-
 ClientClass = function(obj) {
 	console.log(obj)
 	this.step = 1;
@@ -143,6 +155,7 @@ ClientClass = function(obj) {
 		});
 	})(this);
 	this.right_answers_count = 0;
+	this.id = obj.id;
 	this.right_answer = this.objection.right_answer;
 	this.right_closing_text = obj.right_closing_text;
 	this.wrong_closing_text = obj.wrong_closing_text;
@@ -173,6 +186,7 @@ ClientClass.fn.init = function() {
 				break;
 		}
 	}
+	return this;
 }
 ClientClass.fn.getQuestions = function(arr) {
 	var arr = arr || this.questions;
@@ -231,15 +245,20 @@ $("#questions").on("click", "li", function() {
 		return;
 	}
 	$("#introduction_text").html( Client.introduction_text = questionsDB({id:qId}).first().text );
-	if (Client.step===settings.objections_count) {	
+	if (Client.step===settings.objections_count) {
 		if (Client.right_answer==qId) Client.right_answers_count++;
 		if (Client.right_answer==qId && Client.right_answers_count==Client.step) {
 			Client.final = true;
 			Client.getQuestions( Client.final_questions );
 			$("#objection>span").html(Client.closing_text);
-			alert("Верно.теперь переходим к финальному вопросу");
+			alert("Верно. Теперь переходим к финальному вопросу");
 		} else {
-			console.log("Неверно, не перезодим к финальному вопросу")
+			console.log("Неверно. Не переходим к финальному вопросу, а показываем следующего клиента если он есть")
+			try {
+				Client = ClientClass.getClientById(++Client.id).init();
+			} catch(err) {
+				console.log("Очередь закончена")
+			}
 			//wrong
 		}
 		return;
