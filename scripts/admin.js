@@ -13,4 +13,14 @@ var person={id: 1,
 
 var app = angular.module('ng').controller('Person', function($scope, $element) {
 	$scope.person = person;
+	$scope.person.objections_list = [{
+		id:1,
+		text: "text1"
+	}, {
+		id:2,
+		text: "text2"
+	}, {
+		id:3,
+		text: "text3"
+	}]
 })
