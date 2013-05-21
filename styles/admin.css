@@ -1,3 +1,7 @@
+span, div, label, li, ul {
+	margin: 0;
+	padding: 0;
+}
 body {
 	width: 1000px;
 	margin: 0 auto;
@@ -8,4 +12,14 @@ body {
 	float: left;
 	margin: 0 2%;
 	background-color: #c2c2c2;
+}
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.person-objections>li {
+	margin: 5px 5px;
+	border: 1px solid black;
+	border-radius: 5px;
 }

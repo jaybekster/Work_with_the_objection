@@ -1,22 +1,35 @@
 <html>
 	<head>
+		<meta charset="utf8">
 		<link rel="stylesheet" href="styles/admin.css">
+		<script src="data/data"></script>
+		<script src="scripts/jquery-1.9.1.min.js"></script>
 		<script src="scripts/angular.min.js"></script>
 		<script src="scripts/admin.js"></script>
 	</head>
 	<body ng-app="ng">
-		<div id="person" ng-controller="Person">
+		<div id="persons" ng-controller="Persons">
 			<div class="person-column">
 				<span>{{person.id}}</span>
 				<img src="{{person.photo}}" alt="">
 				<input type="text" ng-model="person.name">
 				<ul class="person-objections">
-					<li ng-repeat="objection in person.objections_list"><a href="">{{objection.id + "." + objection.text}}</a></li>
+					<li ng-repeat="objection in person.objections"><a href="">{{objection.text}}</a></li>
+					<li ng-click="modal($event)">Изменить</li>
 				</ul>
 			</div>
 			<div class="person-column">
 				<span>{{person.name}}</span>
 			</div>
+		</div>
+		<div id="objectives"></div>
+		<div id="questions" ng-controller="Questions">
+		<ul id="questions-questions">
+			<li ng-repeat="question in questions"><a href=""><span>{{question.id}}</span><span>{{question.text}}</span><span>{{question.wrong_answer_type}}</span></a></li>
+		</ul>
+		<div id="questions-edit"></p>
+		<div id="settings">
+			<div></div>
 		</div>
 	</body>
 </html>
