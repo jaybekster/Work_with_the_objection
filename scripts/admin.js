@@ -8,9 +8,30 @@ var app = angular.module('ng').controller('Persons', function($scope, $element) 
 	console.log($scope.person)
 })
 
-
-
-
 app.controller("Questions", function($scope) {
 	$scope.questions = data.questions;
 })
+
+
+app.directive('showtab', function() {
+	return {
+		link: function($scope, $element, $attr) {
+			$element.click(function(e) {
+				e.preventDefault();
+				console.log(e)
+			})
+		}
+	}
+})
+
+
+$(function() {
+
+	$("#menu").on("click", "a", function(e) {
+		e.preventDefault();
+		var attr = $(this).attr("href");
+		$( "#" + attr.substr(1, attr.length) ).show().siblings("div").hide();
+	})
+
+})
+

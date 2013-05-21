@@ -23,3 +23,12 @@ ul {
 	border: 1px solid black;
 	border-radius: 5px;
 }
+#menu>li {
+	float: left;
+	width: 25%;
+	text-align: center;
+	background-color: green;
+}
+#menu {
+	clear: both;
+}

@@ -8,6 +8,12 @@
 		<script src="scripts/admin.js"></script>
 	</head>
 	<body ng-app="ng">
+		<ul id="menu">
+			<li><a href="#persons">persons</a></li>
+			<li><a href="#objectives">objectives</a></li>
+			<li><a href="#questions">questions</a></li>
+			<li><a href="#settings">settings</a></li>
+		</ul>
 		<div id="persons" ng-controller="Persons">
 			<div class="person-column">
 				<span>{{person.id}}</span>
