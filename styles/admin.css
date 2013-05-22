@@ -2,6 +2,9 @@ span, div, label, li, ul {
 	margin: 0;
 	padding: 0;
 }
+ul {
+	list-style-type: none;
+}
 body {
 	width: 1000px;
 	margin: 0 auto;
@@ -12,11 +15,6 @@ body {
 	float: left;
 	margin: 0 2%;
 	background-color: #c2c2c2;
-}
-ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
 }
 .person-objections>li {
 	margin: 5px 5px;
@@ -31,4 +29,18 @@ ul {
 }
 #menu {
 	clear: both;
+}
+body>div {
+	display: non: ;e;
+}
+body>div:first-of-type {
+	display: block;
+}
+.questions-questions {
+	width: 100%;
+}
+.questions-questions.clicked {
+	width: 45%;
+	border: 1px solid black;
+	margin: 4%;
 }

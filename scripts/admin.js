@@ -5,16 +5,18 @@ var app = angular.module('ng').controller('Persons', function($scope, $element) 
 	$scope.person.objections = data.objections.filter(function(obj, i) {
 			return person.objections_list.indexOf(obj.id)>-1
 		})
-	console.log($scope.person)
 })
 
 app.controller("Questions", function($scope) {
 	$scope.questions = data.questions;
-})
-
-
-app.directive('showtab', function() {
+	$scope.questionsQuestionsClick = function($e, $attr) {
+		// if ( angular.element($e.toElement).hasClass("questions question") ) {
+			 
+		// }
+	}
+}).directive("questionsQuestion", function() {
 	return {
+		restrict: 'C',
 		link: function($scope, $element, $attr) {
 			$element.click(function(e) {
 				e.preventDefault();

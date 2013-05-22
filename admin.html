@@ -30,10 +30,11 @@
 		</div>
 		<div id="objectives"></div>
 		<div id="questions" ng-controller="Questions">
-		<ul id="questions-questions">
-			<li ng-repeat="question in questions"><a href=""><span>{{question.id}}</span><span>{{question.text}}</span><span>{{question.wrong_answer_type}}</span></a></li>
-		</ul>
-		<div id="questions-edit"></p>
+			<ul id="questions-questions" ng-click="questionsQuestionsClick($e, this)" >
+				<li class="questions-question" ng-repeat="question in questions"><a href=""><span>{{question.id}}</span><span>{{question.text}}</span><span>{{question.wrong_answer_type}}</span></a></li>
+			</ul>
+			<div id="questions-edit "ng-init="editingQuestion = questions[0]">{{editingQuestion}}</div>
+		</div>	
 		<div id="settings">
 			<div></div>
 		</div>
