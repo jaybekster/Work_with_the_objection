@@ -9,7 +9,17 @@ body {
 	width: 1000px;
 	margin: 0 auto;
 }
-
+body>div {
+	display: none;
+}
+body>div:first-of-type {
+	display: block;
+}
+#modal_dialog {
+	position: absolute;
+	left: 50%;
+	margin-left: -25%;
+}
 .person-column {
 	width: 46%;
 	float: left;
@@ -43,4 +53,13 @@ body>div:first-of-type {
 	width: 45%;
 	border: 1px solid black;
 	margin: 4%;
+}
+
+
+
+.objections-objections {
+	width: 45%;
+
+	margin: 4%;
+	border: 1px solid black;
 }

@@ -10,7 +10,7 @@
 	<body ng-app="ng">
 		<ul id="menu">
 			<li><a href="#persons">persons</a></li>
-			<li><a href="#objectives">objectives</a></li>
+			<li><a href="#objections">objectives</a></li>
 			<li><a href="#questions">questions</a></li>
 			<li><a href="#settings">settings</a></li>
 		</ul>
@@ -28,15 +28,29 @@
 				<span>{{person.name}}</span>
 			</div>
 		</div>
-		<div id="objectives"></div>
+		<div id="objections" ng-controller="Objections">
+			<ul class="objections-objections">
+				<li ng-repeat="objection in objections">
+					<a href="#">
+						<span>{{objection.id}}</span>
+						<span>{{objection.text}}</span>
+						<span>{{objection.type}}</span>
+					</a>
+				</li>
+			</ul>
+		</div>
 		<div id="questions" ng-controller="Questions">
 			<ul id="questions-questions" ng-click="questionsQuestionsClick($e, this)" >
 				<li class="questions-question" ng-repeat="question in questions"><a href=""><span>{{question.id}}</span><span>{{question.text}}</span><span>{{question.wrong_answer_type}}</span></a></li>
 			</ul>
 			<div id="questions-edit "ng-init="editingQuestion = questions[0]">{{editingQuestion}}</div>
-		</div>	
+		</div>
 		<div id="settings">
 			<div></div>
+		</div>
+		<div id="modal_dialog" habra="12" ng-style="getModalDialogStyle(item)">
+			some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;some_text;
+			some_text;some_text;some_text;
 		</div>
 	</body>
 </html>
