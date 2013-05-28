@@ -1,39 +1,40 @@
 var person=data.clients[0]
 
 var app = angular.module('ng').controller('Persons', function($scope, $element) {
-	$scope.person = person;
-	$scope.person.objections = data.objections.filter(function(obj, i) {
-			return person.objections_list.indexOf(obj.id)>-1
+	$scope.id = person.id;
+	$scope.name = person.name;
+	$scope.objections_list = (function() {
+		var objections_list = {};
+		person.objections_list.forEach(function(obj) {
+			objections_list[obj] = true;
 		})
+		return objections_list;
+	})()
+	$scope.objections = data.objections.filter(function(obj, i) {
+			return $scope.objections_list[obj.id]
+	})
 	$scope.modal = function(event) {
 		$("#modal_dialog").show();
 	}
+	$scope.$watch('objections_list', function(newValue, oldValue) {
+		$scope.objections = data.objections.filter(function(obj, i) {
+			return newValue[obj.id]
+		})
+	}, true)
 }).directive('habra', function() {
 	return {
-		restrict: "A",
-		compile: function compile(templateElement, templateAttrs) {
-			return  {
-				pre: function($scope, element, attrs) {
-					$scope.objections = data.objections;
-					templateElement.html("<ul>"+$scope.objections.map(function(obj,i) { return "<li habra='11'>"+obj.text+"</li>" }).join("")+"</ul>");
-					console.log(  $(templateElement).css("width")  )
-				},
-				post: function($scope, element, attrs) {
-					$scope.getModalDialogStyle = function($scope, element) {
-						console.log(12)
-					}
-					// templateElement.html("<div>{{person.id}}</div>");
-				}
-			}
-		},
-		template: "<input type='text' value='value'>",
+		template: "<ul ng-model='modelll'><li ng-repeat='i in _objections'><label><input type='checkbox' value='{{i.id}}' ng-model='objections_list[i.id]' ng-checked='objections_list[i.id]'>{{i.text}}</label></li></ul>",
 		link: function($scope, element, attrs) {
-
-
-			console.log(3)
+			$scope._objections = data.objections;
 		}
 	}
 })
+
+
+
+
+
+
 
 app.controller("Questions", function($scope) {
 	$scope.questions = data.questions;
@@ -42,6 +43,7 @@ app.controller("Questions", function($scope) {
 
 		// }
 	}
+	$scope.types = ["vexation", "excuse", "reason"];
 }).directive("questionsQuestion", function() {
 	return {
 		restrict: 'C',
@@ -66,4 +68,3 @@ $(function() {
 	})
 
 })
-

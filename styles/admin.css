@@ -19,6 +19,7 @@ body>div:first-of-type {
 	position: absolute;
 	left: 50%;
 	margin-left: -25%;
+	background-color: white;
 }
 .person-column {
 	width: 46%;
@@ -39,12 +40,7 @@ body>div:first-of-type {
 }
 #menu {
 	clear: both;
-}
-body>div {
-	display: non: ;e;
-}
-body>div:first-of-type {
-	display: block;
+	height: 18px;
 }
 .questions-questions {
 	width: 100%;
@@ -59,7 +55,6 @@ body>div:first-of-type {
 
 .objections-objections {
 	width: 45%;
-
-	margin: 4%;
+	margin: 0 4%;
 	border: 1px solid black;
 }
