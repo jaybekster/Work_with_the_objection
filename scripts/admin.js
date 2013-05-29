@@ -66,5 +66,7 @@ $(function() {
 		var attr = $(this).attr("href");
 		$( "#" + attr.substr(1, attr.length) ).show().siblings("div").hide();
 	})
-
+	$(".close").on("click", function() {
+		$(this).closest("#modal_dialog").hide();
+	})
 })

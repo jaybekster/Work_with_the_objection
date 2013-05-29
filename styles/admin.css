@@ -5,9 +5,16 @@ span, div, label, li, ul {
 ul {
 	list-style-type: none;
 }
+a {
+	text-decoration: none;
+	color: black;
+}
 body {
-	width: 1000px;
+	font-family: Arial;
+	font-size: 16px;
+	background-color: #E1DFE0;
 	margin: 0 auto;
+	width: 960px;
 }
 body>div {
 	display: none;
@@ -16,21 +23,60 @@ body>div:first-of-type {
 	display: block;
 }
 #modal_dialog {
+	display: none;
 	position: absolute;
 	left: 50%;
 	margin-left: -25%;
 	background-color: white;
 }
+.footer {
+	text-align: center;
+}
+.close, .save {
+	padding: 1%;
+	border-top-right-radius: 10px; 
+	border-top-left-radius: 10px;
+	background: -webkit-linear-gradient(top, #52B800 0%,#8BD83E 100%);
+}
 .person-column {
 	width: 46%;
 	float: left;
 	margin: 0 2%;
-	background-color: #c2c2c2;
+	x-background-color: #c2c2c2;
+}
+.person-objections {
+	
+
+}
+ul>span {
+	font-size: 16px;
+	color: #2078D2;
+	padding: 7px 0 7px 20px;
+	border: 1px solid #7E7F81;
+	background-color: white;
+	text-align: center;
+	width: 100%;
+	display: inline-block;
 }
 .person-objections>li {
-	margin: 5px 5px;
+	border-left: 1px solid #7E7F81;
+	border-right: 1px solid #7E7F81;
+
+	background-color: #EBECEE;
+	width: 90%;
+	margin: 0 auto;
+}
+.person-objections>li:last-child {
+	border-bottom: 1px solid #7E7F81;
+}
+.person-objections>li>a {
+	margin: 1% 5%;
 	border: 1px solid black;
 	border-radius: 5px;
+	background-color: #DFD3C3;
+	display: inline-block;
+	width: 86%;
+	padding: 2%;
 }
 #menu>li {
 	float: left;
@@ -40,7 +86,9 @@ body>div:first-of-type {
 }
 #menu {
 	clear: both;
-	height: 18px;
+	height: 44px;
+	font-size: 22px;
+	line-height: 44px;
 }
 .questions-questions {
 	width: 100%;

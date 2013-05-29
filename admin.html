@@ -20,11 +20,18 @@
 				<img ng-src="{{person.photo}}" alt="">
 				<input type="text" ng-model="name">
 				<ul class="person-objections">
+					<span>Список возражений</span>
 					<li ng-repeat="objection in objections"><a href="">{{objection.text}}</a></li>
-					<li ng-click="modal($event)">Изменить</li>
+					<li ng-click="modal($event)"><a>Изменить</a></li>
 				</ul>
 			</div>
-			<div id="modal_dialog" habra ng-style="getModalDialogStyle(item)">
+			<div id="modal_dialog" ng-style="getModalDialogStyle(item)">
+				<p class="header"></p>
+				<p class="text" habra></p>
+				<p class="footer">
+					<a href="" class="save">Сохранить</a>
+					<a href="" class="close">Закрыть</a>
+				</p>
 			</div>
 		</div>
 		<div id="objections" ng-controller="Objections">
