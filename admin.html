@@ -9,10 +9,10 @@
 	</head>
 	<body ng-app="ng">
 		<ul id="menu">
-			<li><a href="#persons">persons</a></li>
-			<li><a href="#objections">objectives</a></li>
-			<li><a href="#questions">questions</a></li>
-			<li><a href="#settings">settings</a></li>
+			<li><a href="#persons">Клиенты</a></li>
+			<li><a href="#objections">Возражения</a></li>
+			<li><a href="#questions">Вопросы</a></li>
+			<li><a href="#settings">Настройки</a></li>
 		</ul>
 		<div id="persons" ng-controller="Persons">
 			<div class="person-column">
@@ -35,24 +35,27 @@
 			</div>
 		</div>
 		<div id="objections" ng-controller="Objections">
+			<button>Добавить</button>
 			<ul class="objections-objections">
 				<li ng-repeat="objection in objections">
 					<a href="#">
-						<span>{{objection.id}}</span>
+						<!-- <span>{{objection.id}}</span> -->
 						<span>{{objection.text}}</span>
-						<span>{{objection.type}}</span>
+						<!-- <span>{{objection.type}}</span> -->
 					</a>
 				</li>
 				<li ng-click="modal($event)">Изменить</li>
 			</ul>
 		</div>
 		<div id="questions" ng-controller="Questions">
-			<ul id="questions-questions" ng-click="questionsQuestionsClick($e, this)" >
+			<button>Добавить</button>
+			<ul class="questions-questions" ng-click="questionsQuestionsClick($e, this)" >
 				<li class="questions-question" ng-repeat="question in questions">
 					<a href="">
-						<span>{{question.id}}</span>
+						Вопрос № {{$index+1}}
+						<!-- <span>{{question.id}}</span>
 						<span>{{question.text}}</span>
-					 	<select ng-model="question.wrong_answer_type" ng-options="type for type in types"></select>
+					 	<select ng-model="question.wrong_answer_type" ng-options="type for type in types"></select> -->
 					</a>
 				</li>
 			</ul>
