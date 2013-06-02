@@ -44,15 +44,14 @@ app.controller("Questions", function($scope) {
 		// }
 	}
 	$scope.types = ["vexation", "excuse", "reason"];
-}).directive("questionsQuestion", function() {
-	return {
-		restrict: 'C',
-		link: function($scope, $element, $attr) {
-			$element.click(function(e) {
-				e.preventDefault();
-				console.log(e)
-			})
-		}
+	$scope.editQuestion = function(id, $e) {
+		element = angular.element($e.target);
+		element.parent().parent().find(".active").removeClass("active");
+		element.parent().addClass("active")
+		$scope.id = id;
+		$scope.text = $scope.questions.filter(function(obj) {
+			return obj.id===id;
+		})[0].text
 	}
 })
 app.controller("Objections", function($scope, $element) {

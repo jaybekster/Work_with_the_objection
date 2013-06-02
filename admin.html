@@ -49,9 +49,10 @@
 		</div>
 		<div id="questions" ng-controller="Questions">
 			<button>Добавить</button>
-			<ul class="questions-questions" ng-click="questionsQuestionsClick($e, this)" >
+			<!-- <ul class="questions-questions" ng-click="questionsQuestionsClick($e, this)" > -->
+			<ul class="questions-questions">
 				<li class="questions-question" ng-repeat="question in questions">
-					<a href="">
+					<a href="" ng-click="editQuestion(question.id, $event)">
 						Вопрос № {{$index+1}}
 						<!-- <span>{{question.id}}</span>
 						<span>{{question.text}}</span>
@@ -59,6 +60,17 @@
 					</a>
 				</li>
 			</ul>
+			<div class="modal_dialog">
+				<p class="header"></p>
+				<p class="text">
+					<span>ID вопроса: {{id}}</span>
+					<textarea name="" id="" cols="30" rows="10">{{text}}</textarea>
+				</p>
+				<p class="footer">
+					<a href="" class="save">Сохранить</a>
+					<a href="" class="close">Закрыть</a>
+				</p>
+			</div>
 			<div id="questions-edit "ng-init="editingQuestion = questions[0]">{{editingQuestion}}</div>
 		</div>
 		<div id="settings">

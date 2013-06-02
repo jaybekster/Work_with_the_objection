@@ -24,8 +24,11 @@ body>div:first-of-type {
 }
 #modal_dialog {
 	display: none;
+}
+#modal_dialog, .modal_dialog {
 	position: absolute;
 	left: 50%;
+	top: 50%;
 	margin-left: -25%;
 	background-color: white;
 }
@@ -119,12 +122,18 @@ ul>span {
 .objections-objections li:after,
 .questions-questions li:after {
 	border-bottom: 10px solid transparent;
-	border-left: 10px solid #666666;
+	border-left: 10px solid #666;
 	border-top: 10px solid transparent;
 	content: '';
 	position: absolute;
 	right: 5%;
 	top: 35%;
+}
+
+.objections-objections li.active:after,
+.questions-questions li.active:after {
+	border-left: none;
+	border-right: 10px solid #666;
 }
 .objections-objections a,
 .questions-questions a {
