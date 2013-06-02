@@ -37,22 +37,19 @@ var app = angular.module('ng').controller('Persons', function($scope, $element) 
 
 
 app.controller("Questions", function($scope) {
-	$scope.questions = data.questions;
-	$scope.questionsQuestionsClick = function($e, $attr) {
-		// if ( angular.element($e.toElement).hasClass("questions question") ) {
-
-		// }
-	}
-	$scope.types = ["vexation", "excuse", "reason"];
-	$scope.editQuestion = function(id, $e) {
-		element = angular.element($e.target);
-		element.parent().parent().find(".active").removeClass("active");
-		element.parent().addClass("active")
-		$scope.id = id;
-		$scope.text = $scope.questions.filter(function(obj) {
+	function findQuestionById(id) {
+		var questions = null;
+		if ( questions = $scope.questions.filter(function(obj) {
 			return obj.id===id;
-		})[0].text
+		}) ) {
+			return questions[0];
+		}
 	}
+	$scope.questions = data.questions;
+	$scope.types = data.settings.question_types;
+	// $scope.saveQuestion = function() {
+	// 	var question = findQuestionById($scope.id);
+	// }
 })
 app.controller("Objections", function($scope, $element) {
 	$scope.objections = data.objections;

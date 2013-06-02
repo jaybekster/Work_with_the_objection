@@ -140,3 +140,10 @@ ul>span {
 	display: inline-block;
 	width: 95%;
 }
+.left_column {
+	float: left;
+}
+.right_column {
+	width: 45%;
+
+}

@@ -52,22 +52,22 @@
 			<!-- <ul class="questions-questions" ng-click="questionsQuestionsClick($e, this)" > -->
 			<ul class="questions-questions">
 				<li class="questions-question" ng-repeat="question in questions">
-					<a href="" ng-click="editQuestion(question.id, $event)">
-						Вопрос № {{$index+1}}
-						<!-- <span>{{question.id}}</span>
-						<span>{{question.text}}</span>
-					 	<select ng-model="question.wrong_answer_type" ng-options="type for type in types"></select> -->
-					</a>
+					<!-- <a href="" ng-click="editQuestion(question.id, $event)"> -->
+					<a href="" ng-click="$parent.question = question">Вопрос № {{$index+1}}</a>
 				</li>
 			</ul>
 			<div class="modal_dialog">
 				<p class="header"></p>
 				<p class="text">
-					<span>ID вопроса: {{id}}</span>
-					<textarea name="" id="" cols="30" rows="10">{{text}}</textarea>
+					<span>ID вопроса: {{question.id}}</span>
+					<br>
+					<textarea name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
+					<select name="" id="">
+						<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
+					</select>
 				</p>
 				<p class="footer">
-					<a href="" class="save">Сохранить</a>
+					<a href="" class="save" ng-click="saveQuestion()">Сохранить</a>
 					<a href="" class="close">Закрыть</a>
 				</p>
 			</div>

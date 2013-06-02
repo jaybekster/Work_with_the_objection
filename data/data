@@ -113,6 +113,11 @@ data = {
 		clients_count: 1,
 		objections_count: 2,
 		questions_count: null,
-		easy_mode: false
+		easy_mode: false,
+		question_types: {
+			excuse: "отговорка",
+			vexation: "отыгрыш",
+			reason: "причина"
+		}
 	}
 }
