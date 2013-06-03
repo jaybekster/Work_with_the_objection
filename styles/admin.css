@@ -145,5 +145,7 @@ ul>span {
 }
 .right_column {
 	width: 45%;
+	float: left;
+	clear: right;
 
 }
