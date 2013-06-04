@@ -43,14 +43,17 @@ app.controller('Persons', function($scope, $element) {
 	return {
 		restrict: "C",
 		compile: function compile(temaplateElement, templateAttrs) {
-			temaplateElement.after("<textarea ng-hide='hidden' ng-model='"+templateAttrs.ngModel+"'></textarea>");
-			temaplateElement.attr("ng-hide", "true")
-			temaplateElement.html("{{hidden}}")
-			templateAttrs["ng-hide"] = "true"
+			var hidden = "hidden" + (counter++);
+			temaplateElement.html("")
+				.append(
+					"<label><input type='checkbox' ng-click='hidden=false' ng-model='"+hidden+"' style='display:none'>" +
+					"<div ng-model='"+templateAttrs.ngModel+"' ng-show='"+hidden+"'>{{"+templateAttrs.ngModel+"}}</div>" +
+					"<textarea ng-model='"+templateAttrs.ngModel+"' ng-hide='"+hidden+"'></textarea>" +
+					"</label>"
+				)
 			return {
 			    pre: function ($scope, element, attrs) {
 			    	$scope.hidden = "true"
-					console.log($scope)
 			    },
 			    post: function($scope, element, attrs) {
 			    }
