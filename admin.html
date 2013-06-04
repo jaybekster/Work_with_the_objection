@@ -15,7 +15,7 @@
 			<li><a href="#settings">Настройки</a></li>
 		</ul>
 		<div id="persons" ng-controller="Persons">
-			<div class="person-column">
+			<div class="person-column left_column">
 				<span>{{id}}</span>
 				<img ng-src="{{person.photo}}" alt="">
 				<input type="text" ng-model="name">
@@ -23,6 +23,17 @@
 					<span>Список возражений</span>
 					<li ng-repeat="objection in objections"><a href="">{{objection.text}}</a></li>
 					<li ng-click="modal($event)"><a>Изменить</a></li>
+				</ul>
+			</div>
+			<div class="right_column">
+				<p class="text">Лояльность: <input type="text" ng-model="model.loyalty"></p>
+				<p class="textarea" ng-model="model.introduction_text">as{{model.introduction_text}}</p>
+				<p class="textarea" ng-model="model.closing_text">{{model.closing_text}}</p>
+				<p class="textarea" ng-model="model.right_closing_text">{{model.right_closing_text}}</p>
+				<p class="textarea" ng-model="model.wrong_closing_text">{{model.wrong_closing_text}}</p>
+				<ul>
+					<span>Список вопросов</span>
+					<li>{{model.questions}}</li>
 				</ul>
 			</div>
 			<div id="modal_dialog" ng-style="getModalDialogStyle(item)">

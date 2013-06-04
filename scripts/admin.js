@@ -9,6 +9,7 @@ app.controller('Persons', function($scope, $element) {
 			return $scope.objections_list[obj.id]
 		})
 	}
+	$scope.model = person;
 	$scope.id = person.id;
 	$scope.name = person.name;
 	$scope.objections_list = (function() {
@@ -35,6 +36,29 @@ app.controller('Persons', function($scope, $element) {
 		template: "<ul ng-model='modelll'><li ng-repeat='i in _objections'><label><input type='checkbox' value='{{i.id}}' ng-model='objections_list[i.id]' ng-checked='objections_list[i.id]'>{{i.text}}</label></li></ul>",
 		link: function($scope, element, attrs) {
 			$scope._objections = data.objections;
+		}
+	}
+}).directive("textarea", function() {
+	var counter = 0;
+	return {
+		restrict: "C",
+		compile: function compile(temaplateElement, templateAttrs) {
+			temaplateElement.after("<textarea ng-hide='hidden' ng-model='"+templateAttrs.ngModel+"'></textarea>");
+			temaplateElement.attr("ng-hide", "true")
+			temaplateElement.html("{{hidden}}")
+			templateAttrs["ng-hide"] = "true"
+			return {
+			    pre: function ($scope, element, attrs) {
+			    	$scope.hidden = "true"
+					console.log($scope)
+			    },
+			    post: function($scope, element, attrs) {
+			    }
+			}
+        },
+		link: function($scope, element, attrs) {
+
+
 		}
 	}
 })
