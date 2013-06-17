@@ -42,27 +42,16 @@ app.controller('Persons', function($scope, $element) {
 	var counter = 0;
 	return {
 		restrict: "C",
-		compile: function compile(temaplateElement, templateAttrs) {
-			var hidden = "hidden_" + (counter++);
-			temaplateElement.html("")
-				.append(
-					"<label><input type='checkbox' ng-model='"+hidden+"' style='display:none'>" +
-					"<div ng-model='"+templateAttrs.ngModel+"' ng-show='"+hidden+"'>{{"+templateAttrs.ngModel+"}}</div>" +
-					"<textarea ng-model='"+templateAttrs.ngModel+"' ng-hide='"+hidden+"'></textarea>" +
-					"</label>"
-				)
-			return {
-			    pre: function ($scope, element, attrs) {
-			    	$scope.hidden = "true"
-			    },
-			    post: function($scope, element, attrs) {
-			    }
+		scope: {
+			text: '=ngModel'
+		},
+		template: "<label ng-show='edit_is_hidden'><input type='checkbox' ng-click='edit_is_hidden=!edit_is_hidden' style='display: none;'><div>{{text}}</div></label>" +
+			"<span><textarea ng-model='text' ng-hide='edit_is_hidden'></textarea><button ng-click='edit_is_hidden=!edit_is_hidden'>Сохранить</button></span>",
+		compile: function compile(templateElement, templateAttrs) {
+			return function(scope, element, attrs) {
+				scope.edit_is_hidden = true;
 			}
         },
-		link: function($scope, element, attrs) {
-
-
-		}
 	}
 })
 
