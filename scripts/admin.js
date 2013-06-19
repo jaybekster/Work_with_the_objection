@@ -66,7 +66,9 @@ app.controller("Questions", function($scope) {
 	$scope.questions = data.questions;
 	$scope.types = data.settings.question_types;
 	$scope.question = {
-
+		id: "",
+		text: "",
+		wrong_answer_type: ""
 	}
 	$scope.add = function() {
 		$scope.questions.push({
@@ -74,17 +76,20 @@ app.controller("Questions", function($scope) {
 			text: $scope.question.text,
 			wrong_answer_type: $scope.question.wrong_answer_type
 		})
-		return $scope.question_index = $scope.questions.length-1;
 	}
 	$scope.cancel = function() {
-		console.log( $scope.question.wrong_answer_type )
-		$scope.model = angular.copy($scope.initial);
 	}
 	$scope.delete = function() {
-		$scope.questions.splice($scope.question_index--, 1);
+		$scope.questions.splice($scope.question_index, 1);
 	}
+	$scope.$watch("questions.length", function(newValue, oldValue) {
+		if (newValue<oldValue) {
+			if ($scope.question_index===0) $scope.question = $scope.questions[0];
+		}
+		if (newValue>oldValue) $scope.question_index = newValue-1;
+	})
 	$scope.$watch("question_index", function(newValue, oldValue) {
-		console.log(newValue)
+		if (newValue===undefined) return false;
 		$scope.question = $scope.questions[newValue];
 	})
 })
