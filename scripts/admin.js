@@ -62,77 +62,64 @@ app.controller('Persons', function($scope, $element) {
 
 
 app.controller("Questions", function($scope) {
-	function findById(id) {
-		var questions = null;
-		if ( questions = $scope.model.questions.filter(function(obj) {
-			return obj.id===id;
-		}) ) {
-			return questions[0];
-		}
+
+	$scope.questions = data.questions;
+	$scope.types = data.settings.question_types;
+	$scope.question = {
+
 	}
-	$scope.model = {
-		questions: data.questions,
-		types: data.settings.question_types
+	$scope.add = function() {
+		$scope.questions.push({
+			id: $scope.questions[$scope.questions.length-1].id+1,
+			text: $scope.question.text,
+			wrong_answer_type: $scope.question.wrong_answer_type
+		})
+		return $scope.question_index = $scope.questions.length-1;
 	}
-	$scope.initial = angular.copy($scope.model);
-	$scope.editQuestion = function(question, $e) {
-		// var element = angular.element($.toElement)
-	}
-	// $scope.saveQuestion = function() {
-	// 	var question = findQuestionById($scope.id);
-	// }
 	$scope.cancel = function() {
+		console.log( $scope.question.wrong_answer_type )
 		$scope.model = angular.copy($scope.initial);
 	}
 	$scope.delete = function() {
-		if (!$scope.model.questions) return false;
-		$scope.model.questions.splice( findById($scope.model.questions.id), 1 );
+		$scope.questions.splice($scope.question_index--, 1);
 	}
+	$scope.$watch("question_index", function(newValue, oldValue) {
+		console.log(newValue)
+		$scope.question = $scope.questions[newValue];
+	})
 })
 
 app.controller("Objections", function($scope, $element) {
-	function updateQuestions(questions, objections) {
-		var questions = questions || data.questions;
-		var objections = objections || $scope.objections;
-		objections.forEach(function(obj, i) {
-			obj.questions = [];
-			obj.question_list.forEach(function(id) {
-				obj.questions.push(
-					questions.filter(function(question) {
-						return question.id===id;
-					})[0]
-				)
-			})
-		})
-
-
-	}
+	$scope.objections = data.objections;
 	$scope.model = {
-		objections: data.objections,
-		objection: null,
-		questions: updateQuestions(null, data.objections)
-	}
-	console.log()
-
-	$scope.initial = angular.copy($scope.model)
-	function findById(id) {
-		var result = $scope.model.objections.filter(function(obj,i) {
-			return obj.id===id;
-		})
-		if (result) return result[0];
+		objection: {
+			id: function() {
+				return data.objections[data.objections.length-1].id
+			}(),
+			text: ""
+		},
+		questions: "Список вопросов"
 	}
 	$scope.delete = function() {
-		if (!$scope.model.objection) return false;
-		$scope.model.objections.splice( findById($scope.model.objection.id), 1 );
+		$scope.objections.splice($scope.objection_index--, 1);
 	}
 	$scope.save = function() {
 		if (!$scope.model.objection) return false;
-
 	}
 	$scope.cancel = function() {
 		$scope.model = angular.copy($scope.initial);
 	}
 	$scope.$root.objections = $scope.model.objections;
+	$scope.add = function() {
+		$scope.objections.push({
+			id: $scope.model.objection.id+=1,
+			text: $scope.model.objection.text
+		})
+
+	}
+	$scope.$watch("objection_index", function(newValue, oldValue) {
+		$scope.model.objection = $scope.objections[newValue];
+	})
 })
 
 $(function() {

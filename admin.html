@@ -46,16 +46,17 @@
 			</div>
 		</div>
 		<div id="objections" ng-controller="Objections">
-			<button>Добавить</button>
+			<textarea></textarea>
 			<div class="stroke">
 				<ul class="objections-objections left_column">
-					<li ng-repeat="objection in model.objections">
-						<a href="#" ng-click="$parent.model.objection = objection">
+					<li ng-repeat="objection in objections">
+						<a href="#" ng-click="$parent.objection_index = $index">
 							<!-- <span>{{objection.id}}</span> -->
 							<span>{{objection.text}}</span>
 							<!-- <span>{{objection.type}}</span> -->
 						</a>
 					</li>
+					{{objection_index}}
 					<li ng-click="modal($event)">Изменить</li>
 				</ul>
 				<div class="right_column">
@@ -70,7 +71,8 @@
 						<li>{{model.questions}}</li>
 					</ul>
 					<p class="footer">
-						<a href="" ng-click="delete()">Удалить</a>
+						<button ng-click="add()">Добавить</button>
+						<a href="" ng-click="delete(objection)">Удалить</a>
 						<a href="" class="save" ng-click="save()">Сохранить</a>
 						<a href="" class="close" ng-click="cancel()">Закрыть</a>
 					</p>
@@ -78,13 +80,10 @@
 			</div>
 		</div>
 		<div id="questions" ng-controller="Questions">
-			<button>Добавить</button>
-			<!-- <ul class="questions-questions" ng-click="questionsQuestionsClick($e, this)" > -->
 			<div class="stroke">
 				<ul class="questions-questions left_column">
-					<li class="questions-question" ng-repeat="question in model.questions">
-						<!-- <a href="" ng-click="editQuestion(question.id, $event)"> -->
-						<a href="" ng-click="editQuestion($parent.question = question, $event)">Вопрос № {{$index+1}}</a>
+					<li class="questions-question" ng-repeat="question in questions">
+						<a href="" ng-click="$parent.question_index = $index">{{question.text}}</a>
 					</li>
 				</ul>
 				<div class="right_column">
@@ -93,11 +92,12 @@
 						<span>ID вопроса: {{question.id}}</span>
 						<br>
 						<textarea name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
-						<select name="" id="">
-							<option ng-repeat="(key, value) in model.types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
+						<select name="" id="" ng-model="question.wrong_answer_type">
+							<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
 						</select>
 					</p>
 					<p class="footer">
+						<button ng-click="add()">Добавить</button>
 						<a href="" ng-click="delete()">Удалить</a>
 						<a href="" class="save" ng-click="save()">Сохранить</a>
 						<a href="" class="close" ng-click="close()">Закрыть</a>
