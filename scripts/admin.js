@@ -61,7 +61,8 @@ app.controller('Persons', function($scope, $element) {
 
 
 
-app.controller("Questions", function($scope) {
+app.controller("Questions", function($scope, $filter) {
+
 
 	$scope.questions = data.questions;
 	$scope.types = data.settings.question_types;
@@ -92,6 +93,9 @@ app.controller("Questions", function($scope) {
 		if (newValue===undefined) return false;
 		$scope.question = $scope.questions[newValue];
 	})
+	$scope.search = function(property, index) {
+		if ( $scope.questions[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
+	}
 })
 
 app.controller("Objections", function($scope, $element) {

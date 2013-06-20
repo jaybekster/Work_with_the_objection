@@ -81,8 +81,9 @@
 		</div>
 		<div id="questions" ng-controller="Questions">
 			<div class="stroke">
+				<input type="text" ng-model="searchText" ng-init="searchText = ''">
 				<ul class="questions-questions left_column">
-					<li class="questions-question" ng-repeat="question in questions">
+					<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
 						<a href="" ng-click="$parent.question_index = $index">{{question.text}}</a>
 					</li>
 				</ul>
