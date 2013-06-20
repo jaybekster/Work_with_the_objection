@@ -9,9 +9,8 @@ app.controller('Persons', function($scope, $element) {
 			return $scope.objections_list[obj.id]
 		})
 	}
-	$scope.model = person;
-	$scope.id = person.id;
-	$scope.name = person.name;
+	$scope.clients = data.clients;
+	$scope.person = person;
 	$scope.objections_list = (function() {
 		var objections_list = {};
 		person.objections_list.forEach(function(obj) {
@@ -20,9 +19,28 @@ app.controller('Persons', function($scope, $element) {
 		return objections_list;
 	})()
 	$scope.objections = updateObjection();
+	function getQuestion() {
+		if (!$scope.objection) return false;
+		var question_ids = data.questions.map(function(obj, i) {
+			return obj.id;
+		})
+		var questions = [];
+		angular.forEach($scope.objection.question_list, function(obj, i) {
+			if ( (i = question_ids.indexOf(obj) )>-1 ) {
+				questions.push( data.questions[i] );
+			}
+		})
+		return questions;
+	}
+
 	$scope.modal = function(event) {
 		$("#modal_dialog").show();
 	}
+
+	$scope.$watch('objection',  function(newValue, oldValue) {
+		$scope.questions = getQuestion();
+	}, true);
+
 	$scope.$watch('objections_list', function(newValue, oldValue) {
 		$scope.objections = data.objections.filter(function(obj, i) {
 			return newValue[obj.id]

@@ -1,7 +1,7 @@
 data = {
 	objections: [
 		{
-			id: 1,
+			id: 0,
 			type: "reason",
 			text: "На самом деле, у меня уже есть аналогичный продукт другого Банка, Ваш мне не нужен",
 			question_list: [0, 1, 2, 3],
@@ -9,7 +9,7 @@ data = {
 			right_comment: "",
 			wrong_comment: ""
 		}, {
-			id: 2,
+			id: 1,
 			type: "excuse",
 			text: "Мне это не нужно, я оплачиваю коммунальные платежи по другому",
 			question_list: [0, 1, 2, 3],
@@ -17,7 +17,7 @@ data = {
 			right_comment: "",
 			wrong_comment: ""
 		}, {
-			id: 3,
+			id: 2,
 			type: "vexation",
 			text: "Нет, меня в Вашем Банке всегда обманывают, и банкоматы у Вас всегда не работают!",
 			question_list: [0, 1, 2, 4],
@@ -25,7 +25,7 @@ data = {
 			right_comment: "",
 			wrong_comment: ""
 		}, {
-			id: 4,
+			id: 3,
 			type: "excuse",
 			text: "У меня дома нет интернета, мне этот продукт не интересен",
 			question_list: [0, 5, 6, 7],
