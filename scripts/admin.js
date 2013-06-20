@@ -62,8 +62,6 @@ app.controller('Persons', function($scope, $element) {
 
 
 app.controller("Questions", function($scope, $filter) {
-
-
 	$scope.questions = data.questions;
 	$scope.types = data.settings.question_types;
 	$scope.question = {
@@ -85,7 +83,11 @@ app.controller("Questions", function($scope, $filter) {
 	}
 	$scope.$watch("questions.length", function(newValue, oldValue) {
 		if (newValue<oldValue) {
-			if ($scope.question_index===0) $scope.question = $scope.questions[0];
+			if ($scope.question_index===0) {
+				$scope.question = $scope.questions[0];
+			} else {
+				$scope.question_index-=1;
+			}
 		}
 		if (newValue>oldValue) $scope.question_index = newValue-1;
 	})
@@ -106,8 +108,7 @@ app.controller("Objections", function($scope, $element) {
 				return data.objections[data.objections.length-1].id
 			}(),
 			text: ""
-		},
-		questions: "Список вопросов"
+		}
 	}
 	$scope.delete = function() {
 		$scope.objections.splice($scope.objection_index--, 1);
@@ -126,8 +127,24 @@ app.controller("Objections", function($scope, $element) {
 		})
 
 	}
+	var f = function() {
+		var question_ids = data.questions.map(function(obj, i) {
+			return obj.id;
+		})
+		var questions = [];
+		angular.forEach($scope.model.objection.question_list, function(obj, i) {
+			if ( question_ids.indexOf(obj)>-1 ) {
+				questions.push( data.questions[i] );
+			}
+		})
+		return questions;
+	}
+	$scope.questions = f();
+
 	$scope.$watch("objection_index", function(newValue, oldValue) {
+		if (newValue===undefined) return false;
 		$scope.model.objection = $scope.objections[newValue];
+		$scope.questions = f();
 	})
 })
 
