@@ -6,11 +6,13 @@ app.config(function ($routeProvider) {
     $routeProvider.
         when("/questions", {controller: "Questions", templateUrl: "questions.html"}).
         when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/persons", {controller: "Objections", templateUrl: "persons.html"}).
+        when("/objections/:objection_index", {controller: "Objections", templateUrl: "objections.html"}).
+        when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
+        when("/questions/:question_index", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
 });
 
-app.controller('Persons', function($scope, $element) {
+app.controller("Persons", function($scope) {
 	$scope.clients = data.clients;
 	function updateObjection(objections) {
 		var objections = objections || data.objections;
@@ -87,7 +89,8 @@ app.controller('Persons', function($scope, $element) {
 
 
 
-app.controller("Questions", function($scope, $filter) {
+app.controller("Questions", function($scope, $filter, $routeParams) {
+	$scope.question_index = $routeParams.question_index || undefined;
 	$scope.questions = data.questions;
 	$scope.types = data.settings.question_types;
 	$scope.question = {
@@ -120,13 +123,15 @@ app.controller("Questions", function($scope, $filter) {
 	$scope.$watch("question_index", function(newValue, oldValue) {
 		if (newValue===undefined) return false;
 		$scope.question = $scope.questions[newValue];
+		$routeParams.question_index = $scope.questions[newValue];
 	})
 	$scope.search = function(property, index) {
 		if ( $scope.questions[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
 })
 
-app.controller("Objections", function($scope, $filter) {
+app.controller("Objections", function($scope, $filter, $routeParams) {
+	$scope.objection_index = $routeParams.objection_index || undefined
 	$scope.objections = data.objections;
 	$scope.model = {
 		objection: {
@@ -154,7 +159,6 @@ app.controller("Objections", function($scope, $filter) {
 
 	}
 	$scope.search = function(property, index) {
-		console.log(index)
 		if ( $scope.objections[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
 	var f = function() {

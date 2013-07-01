@@ -12,7 +12,7 @@
 			<li><a href="#/persons">Клиенты</a></li>
 			<li><a href="#/objections">Возражения</a></li>
 			<li><a href="#/questions">Вопросы</a></li>
-			<li><a href="#settings">Настройки</a></li>
+			<li><a href="#/settings">Настройки</a></li>
 		</ul>
 		<div ng-view></div>
 
@@ -21,7 +21,7 @@
 	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
 	<ul class="objections-objections left_column">
 		<li ng-repeat="objection in objections" ng-show="search('text', $index)">
-			<a href="#" ng-click="$parent.objection_index = $index">
+			<a href="#/objections/{{$index}}" ng-click="$parent.objection_index = $index">
 				{{objection.text}}
 			</a>
 		</li>
@@ -48,10 +48,22 @@
 </div>
 </script>
 
+<style>
+	.persons img {
+		display: block;
+		width: 128px;
+		height: 128px;
+	}
 
+</style>
 <script type="text/ng-template" id="persons.html">
-<ul>
-	<li ng-repeat="person in clients" ng-click="$parent.person = person">{{person.id}}</li>
+<ul class="persons">
+	<li ng-repeat="person in clients">
+		<a>
+			<img src="person.photo">
+			{{person.name}}
+		</a>
+	</li>
 </ul>
 <div class="person-column left_column">
 	<span>{{person.id}}</span>
@@ -90,7 +102,7 @@
 	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
 	<ul class="questions-questions left_column">
 		<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
-			<a href="" ng-click="$parent.question_index = $index">{{question.text}}</a>
+			<a href="#/questions/{{$index}}">{{question.text}}</a>
 		</li>
 	</ul>
 	<div class="right_column">
