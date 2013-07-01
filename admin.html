@@ -9,108 +9,108 @@
 	</head>
 	<body ng-app="ng">
 		<ul id="menu">
-			<li><a href="#persons">Клиенты</a></li>
-			<li><a href="#objections">Возражения</a></li>
-			<li><a href="#questions">Вопросы</a></li>
+			<li><a href="#/persons">Клиенты</a></li>
+			<li><a href="#/objections">Возражения</a></li>
+			<li><a href="#/questions">Вопросы</a></li>
 			<li><a href="#settings">Настройки</a></li>
 		</ul>
-		<div id="persons" ng-controller="Persons">
-			<ul>
-				<li ng-repeat="person in clients" ng-click="$parent.person = person">{{person.id}}</li>
-			</ul>
-			<div class="person-column left_column">
-				<span>{{person.id}}</span>
-				<img ng-src="{{person.photo}}" alt="">
-				<input type="text" ng-model="person.name">
-				<ul class="person-objections">
-					<span>Список возражений</span>
-					<li ng-repeat="objection in objections" ng-click="$parent.objection = objection"><a href="">{{objection.text}}</a></li>
-					<li ng-click="modal($event)"><a>Изменить</a></li>
-				</ul>
-			</div>
-			<div class="right_column">
-				<p class="text">Лояльность: <input type="text" ng-model="person.loyalty"></p>
-				<p class="textarea" ng-model="person.introduction_text"></p>
-				<p class="textarea" ng-model="person.closing_text"></p>
-				<p class="textarea" ng-model="person.right_closing_text"></p>
-				<p class="textarea" ng-model="person.wrong_closing_text"></p>
-				<ul>
-					<span>Список вопросов</span>
-					<li ng-repeat="question in questions"><a href="">{{question.text}}</a></li>
-					<li ng-click="modal($event)"><a>Изменить</a></li>
-				</ul>
-			</div>
-			<div id="modal_dialog" ng-style="getModalDialogStyle(item)">
-				<p class="header"></p>
-				<p class="text" habra></p>
-				<p class="footer">
-					<a href="" class="save">Сохранить</a>
-					<a href="" class="close">Закрыть</a>
-				</p>
-			</div>
-		</div>
-		<div id="objections" ng-controller="Objections">
-			<textarea></textarea>
-			<div class="stroke">
-				<ul class="objections-objections left_column">
-					<li ng-repeat="objection in objections">
-						<a href="#" ng-click="$parent.objection_index = $index">
-							<!-- <span>{{objection.id}}</span> -->
-							<span>{{objection.text}}</span>
-							<!-- <span>{{objection.type}}</span> -->
-						</a>
-					</li>
-					<li ng-click="modal($event)">Изменить</li>
-				</ul>
-				<div class="right_column">
-					<p class="header"></p>
-					<p class="text">
-						<span>ID возражения: {{model.objection.id}}</span>
-						<br>
-						<textarea name="" id="" cols="30" rows="10" ng-model="model.objection.text"></textarea>
-					</p>
-					<ul>
-						<span>Список вопросов</span>
-						<li ng-repeat="question in questions">{{question.text}}</li>
-					</ul>
-					<p class="footer">
-						<button ng-click="add()">Добавить</button>
-						<a href="" ng-click="delete(objection)">Удалить</a>
-						<a href="" class="save" ng-click="save()">Сохранить</a>
-						<a href="" class="close" ng-click="cancel()">Закрыть</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div id="questions" ng-controller="Questions">
-			<div class="stroke">
-				<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
-				<ul class="questions-questions left_column">
-					<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
-						<a href="" ng-click="$parent.question_index = $index">{{question.text}}</a>
-					</li>
-				</ul>
-				<div class="right_column">
-					<p class="header"></p>
-					<p class="text">
-						<span>ID вопроса: {{question.id}}</span>
-						<br>
-						<textarea name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
-						<select name="" id="" ng-model="question.wrong_answer_type">
-							<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
-						</select>
-					</p>
-					<p class="footer">
-						<button ng-click="add()">Добавить</button>
-						<a href="" ng-click="delete()">Удалить</a>
-						<a href="" class="save" ng-click="save()">Сохранить</a>
-						<a href="" class="close" ng-click="close()">Закрыть</a>
-					</p>
-				</div>
-			</div>
-		</div>
-		<div id="settings">
-			<div></div>
-		</div>
+		<div ng-view></div>
+
+<script type="text/ng-template" id="objections.html">
+<div class="stroke">
+	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
+	<ul class="objections-objections left_column">
+		<li ng-repeat="objection in objections" ng-show="search('text', $index)">
+			<a href="#" ng-click="$parent.objection_index = $index">
+				{{objection.text}}
+			</a>
+		</li>
+		<li ng-click="modal($event)">Изменить</li>
+	</ul>
+	<div class="right_column">
+		<p class="header"></p>
+		<p class="text">
+			<span>ID возражения: {{model.objection.id}}</span>
+			<br>
+			<textarea name="" id="" cols="30" rows="10" ng-model="model.objection.text"></textarea>
+		</p>
+		<ul>
+			<span>Список вопросов</span>
+			<li ng-repeat="question in questions">{{question.text}}</li>
+		</ul>
+		<p class="footer">
+			<button ng-click="add()">Добавить</button>
+			<a href="" ng-click="delete(objection)">Удалить</a>
+			<a href="" class="save" ng-click="save()">Сохранить</a>
+			<a href="" class="close" ng-click="cancel()">Закрыть</a>
+		</p>
+	</div>
+</div>
+</script>
+
+
+<script type="text/ng-template" id="persons.html">
+<ul>
+	<li ng-repeat="person in clients" ng-click="$parent.person = person">{{person.id}}</li>
+</ul>
+<div class="person-column left_column">
+	<span>{{person.id}}</span>
+	<img ng-src="{{person.photo}}" alt="">
+	<input type="text" ng-model="person.name">
+	<ul class="person-objections">
+		<span>Список возражений</span>
+		<li ng-repeat="objection in objections" ng-click="$parent.objection = objection"><a href="">{{objection.text}}</a></li>
+		<li ng-click="modal($event)"><a>Изменить</a></li>
+	</ul>
+</div>
+<div class="right_column">
+	<p class="text">Лояльность: <input type="text" ng-model="person.loyalty"></p>
+	<p class="textarea" ng-model="person.introduction_text"></p>
+	<p class="textarea" ng-model="person.closing_text"></p>
+	<p class="textarea" ng-model="person.right_closing_text"></p>
+	<p class="textarea" ng-model="person.wrong_closing_text"></p>
+	<ul>
+		<span>Список вопросов</span>
+		<li ng-repeat="question in questions"><a href="">{{question.text}}</a></li>
+		<li ng-click="modal($event)"><a>Изменить</a></li>
+	</ul>
+</div>
+<div id="modal_dialog" ng-style="getModalDialogStyle(item)">
+	<p class="header"></p>
+	<p class="text" habra></p>
+	<p class="footer">
+		<a href="" class="save">Сохранить</a>
+		<a href="" class="close">Закрыть</a>
+	</p>
+</div>
+</script>
+
+<script type="text/ng-template" id="questions.html">
+<div class="stroke">
+	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
+	<ul class="questions-questions left_column">
+		<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
+			<a href="" ng-click="$parent.question_index = $index">{{question.text}}</a>
+		</li>
+	</ul>
+	<div class="right_column">
+		<p class="header"></p>
+		<p class="text">
+			<span>ID вопроса: {{question.id}}</span>
+			<br>
+			<textarea name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
+			<select name="" id="" ng-model="question.wrong_answer_type">
+				<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
+			</select>
+		</p>
+		<p class="footer">
+			<button ng-click="add()">Добавить</button>
+			<a href="" ng-click="delete()">Удалить</a>
+			<a href="" class="save" ng-click="save()">Сохранить</a>
+			<a href="" class="close" ng-click="close()">Закрыть</a>
+		</p>
+	</div>
+</div>
+</script>
 	</body>
 </html>

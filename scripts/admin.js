@@ -2,14 +2,22 @@ var person=data.clients[0]
 
 var app = angular.module('ng')
 
+app.config(function ($routeProvider) {
+    $routeProvider.
+        when("/questions", {controller: "Questions", templateUrl: "questions.html"}).
+        when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
+        when("/persons", {controller: "Objections", templateUrl: "persons.html"}).
+        otherwise({redirectTo : "/persons"});
+});
+
 app.controller('Persons', function($scope, $element) {
+	$scope.clients = data.clients;
 	function updateObjection(objections) {
 		var objections = objections || data.objections;
 		return objections.filter(function(obj, i) {
 			return $scope.objections_list[obj.id]
 		})
 	}
-	$scope.clients = data.clients;
 	$scope.person = person;
 	$scope.objections_list = (function() {
 		var objections_list = {};
@@ -118,7 +126,7 @@ app.controller("Questions", function($scope, $filter) {
 	}
 })
 
-app.controller("Objections", function($scope, $element) {
+app.controller("Objections", function($scope, $filter) {
 	$scope.objections = data.objections;
 	$scope.model = {
 		objection: {
@@ -145,6 +153,10 @@ app.controller("Objections", function($scope, $element) {
 		})
 
 	}
+	$scope.search = function(property, index) {
+		console.log(index)
+		if ( $scope.objections[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
+	}
 	var f = function() {
 		var question_ids = data.questions.map(function(obj, i) {
 			return obj.id;
@@ -163,17 +175,5 @@ app.controller("Objections", function($scope, $element) {
 		if (newValue===undefined) return false;
 		$scope.model.objection = $scope.objections[newValue];
 		$scope.questions = f();
-	})
-})
-
-$(function() {
-
-	$("#menu").on("click", "a", function(e) {
-		e.preventDefault();
-		var attr = $(this).attr("href");
-		$( "#" + attr.substr(1, attr.length) ).show().siblings("div").hide();
-	})
-	$(".close").on("click", function() {
-		$(this).closest("#modal_dialog").hide();
 	})
 })
