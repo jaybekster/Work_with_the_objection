@@ -34,9 +34,11 @@
 			<br>
 			<textarea name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
 		</p>
-		<ul>
+		<ul class="questions-objections" ng-show="objection.questions.length">
 			<span>Список вопросов</span>
-			<li ng-repeat="question in objection.questions">{{question.text}}</li>
+			<li ng-repeat="question in objection.questions">
+				<a href="#/questions/{{question.id}}">{{question.text}}</a>
+			</li>
 		</ul>
 		<p class="footer">
 			<button ng-click="add()">Добавить</button>
@@ -81,11 +83,6 @@
 	<p class="textarea" ng-model="person.closing_text"></p>
 	<p class="textarea" ng-model="person.right_closing_text"></p>
 	<p class="textarea" ng-model="person.wrong_closing_text"></p>
-	<ul>
-		<span>Список вопросов</span>
-		<li ng-repeat="question in questions"><a href="">{{question.text}}</a></li>
-		<li ng-click="modal($event)"><a>Изменить</a></li>
-	</ul>
 </div>
 <div id="modal_dialog" ng-style="getModalDialogStyle(item)">
 	<p class="header"></p>

@@ -61,7 +61,8 @@ ul>span {
 	width: 100%;
 	display: inline-block;
 }
-.person-objections>li {
+.person-objections>li,
+.questions-objections>li {
 	border-left: 1px solid #7E7F81;
 	border-right: 1px solid #7E7F81;
 
@@ -72,7 +73,8 @@ ul>span {
 .person-objections>li:last-child {
 	border-bottom: 1px solid #7E7F81;
 }
-.person-objections>li>a {
+.person-objections>li>a,
+.questions-objections>li>a {
 	margin: 1% 5%;
 	border: 1px solid black;
 	border-radius: 5px;

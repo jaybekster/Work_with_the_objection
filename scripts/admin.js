@@ -20,7 +20,10 @@ app.config(function ($routeProvider) {
         when("/questions", {controller: "Questions", templateUrl: "questions.html"}).
         when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
         when("/objections/:oId", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
+        when("/persons", {controller: "Persons", templateUrl: "persons.html", resolve: {
+        	 data: ["$q","$timeout",function($pId,$timeout) {
+        	 	$pId= 2;
+        	 }]}}).
         when("/persons/:pId", {controller: "Persons", templateUrl: "persons.html"}).
         when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
@@ -33,7 +36,7 @@ app.factory('theService', function() {
 });
 
 app.controller("Persons", function($scope, $routeParams, theService) {
-	$scope.person_id = $routeParams.person_id || undefined;
+	$scope.person_id = $routeParams.pId || undefined;
 	$scope.clients = theService.data.clients;
 	$scope.person = theService.data.clients.filter(function(obj, i) { if (obj.id==$scope.person_id) {return obj} })[0]
 	$scope.model = {
@@ -43,7 +46,6 @@ app.controller("Persons", function($scope, $routeParams, theService) {
 		loyalty: $scope.person ? $scope.person.loyalty : null,
 		objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null
 	}
-
 })
 
 
@@ -85,7 +87,7 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService) 
 })
 
 app.controller("Objections", function($scope, $filter, $routeParams, theService) {
-	$scope.oId = $routeParams.oId || undefined
+	$scope.oId = $routeParams.oId || false;
 	$scope.objections = theService.data.objections;
 	$scope.questions = theService.data.questions;
 	$scope.objection = $scope.objections._find("id", $scope.qId) || {
@@ -94,7 +96,9 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService)
 		questions: []
 	}
 	$scope.delete = function() {
+		if ($scope.oId === false) return false;
 		$scope.objections.splice($scope.objections._find("id", $scope.oId, true), 1);
+		$scope.oId = false;
 	}
 	$scope.save = function() {
 		if (!$scope.model.objection) return false;
@@ -104,8 +108,8 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService)
 	}
 	$scope.add = function() {
 		$scope.objections.push({
-			id: $scope.model.objection.id+=1,
-			text: $scope.model.objection.text
+			id: $scope.objections[$scope.objections.length-1].id,
+			text: $scope.objection.text
 		})
 
 	}
@@ -113,13 +117,13 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService)
 		if ( $scope.objections[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
 	$scope.$watch("oId", function(newValue, oldValue) {
-		if (newValue===undefined) return false;
-		$scope.objection = $scope.objections._find("id", $scope.oId)
-		$scope.objection.questions = $scope.objection ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null
-		if (!$scope.objection) return {
+		if (newValue===undefined || newValue===false) return $scope.objection = {
 			id: "",
 			text: "",
 			questions: []
 		}
+		$scope.objection = $scope.objections._find("id", newValue)
+		if (!$scope.objection) return false;
+		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
 	})
 })
