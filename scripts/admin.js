@@ -1,3 +1,16 @@
+Array.prototype._find = function(property, value, pos) {
+	if (!this.length) return false;
+	var indexes = [];
+	var objects = this.filter(function(obj, i) {
+		if (obj[property]==value) {
+			indexes.push(i);
+			return obj
+		}
+	})
+	if (pos && objects[0]) return indexes[0];
+	return objects[0] || null;
+}
+
 var person=data.clients[0]
 
 var app = angular.module('ng')
@@ -6,81 +19,31 @@ app.config(function ($routeProvider) {
     $routeProvider.
         when("/questions", {controller: "Questions", templateUrl: "questions.html"}).
         when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/objections/:objection_index", {controller: "Objections", templateUrl: "objections.html"}).
+        when("/objections/:oId", {controller: "Objections", templateUrl: "objections.html"}).
         when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
-        when("/questions/:question_index", {controller: "Questions", templateUrl: "questions.html"}).
+        when("/persons/:pId", {controller: "Persons", templateUrl: "persons.html"}).
+        when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
 });
 
-app.controller("Persons", function($scope) {
-	$scope.clients = data.clients;
-	function updateObjection(objections) {
-		var objections = objections || data.objections;
-		return objections.filter(function(obj, i) {
-			return $scope.objections_list[obj.id]
-		})
-	}
-	$scope.person = person;
-	$scope.objections_list = (function() {
-		var objections_list = {};
-		person.objections_list.forEach(function(obj) {
-			objections_list[obj] = true;
-		})
-		return objections_list;
-	})()
-	$scope.objections = updateObjection();
-	function getQuestion() {
-		if (!$scope.objection) return false;
-		var question_ids = data.questions.map(function(obj, i) {
-			return obj.id;
-		})
-		var questions = [];
-		angular.forEach($scope.objection.question_list, function(obj, i) {
-			if ( (i = question_ids.indexOf(obj) )>-1 ) {
-				questions.push( data.questions[i] );
-			}
-		})
-		return questions;
+app.factory('theService', function() {
+    return {
+        data : angular.copy( data )
+    };
+});
+
+app.controller("Persons", function($scope, $routeParams, theService) {
+	$scope.person_id = $routeParams.person_id || undefined;
+	$scope.clients = theService.data.clients;
+	$scope.person = theService.data.clients.filter(function(obj, i) { if (obj.id==$scope.person_id) {return obj} })[0]
+	$scope.model = {
+		id: $scope.person_id,
+		name: $scope.person ? $scope.person.name : null,
+		photo: $scope.person ? $scope.person.photo : null,
+		loyalty: $scope.person ? $scope.person.loyalty : null,
+		objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null
 	}
 
-	$scope.modal = function(event) {
-		$("#modal_dialog").show();
-	}
-
-	$scope.$watch('objection',  function(newValue, oldValue) {
-		$scope.questions = getQuestion();
-	}, true);
-
-	$scope.$watch('objections_list', function(newValue, oldValue) {
-		$scope.objections = data.objections.filter(function(obj, i) {
-			return newValue[obj.id]
-		})
-	}, true)
-	$scope.$root.$watch("objections", function(newValue, oldValue) {
-		$scope.objections = updateObjection(newValue)
-	}, true)
-}).directive('habra', function() {
-	return {
-		template: "<ul ng-model='modelll'><li ng-repeat='i in _objections'><label><input type='checkbox' value='{{i.id}}' ng-model='objections_list[i.id]' ng-checked='objections_list[i.id]'>{{i.text}}</label></li></ul>",
-		link: function($scope, element, attrs) {
-			$scope._objections = data.objections;
-		}
-	}
-}).directive("textarea", function() {
-	var counter = 0;
-	return {
-		restrict: "C",
-		scope: {
-			text: '=ngModel'
-		},
-		template: "<label ng-show='edit_is_hidden'><input type='checkbox' ng-click='edit_is_hidden=!edit_is_hidden' style='display: none;'><div>{{text}}</div></label>" +
-			"<span><textarea ng-model='text' ng-hide='edit_is_hidden'></textarea><button ng-click='edit_is_hidden=!edit_is_hidden'>Сохранить</button></span>",
-		compile: function compile(templateElement, templateAttrs) {
-			return function(scope, element, attrs) {
-				scope.edit_is_hidden = true;
-			}
-        },
-	}
 })
 
 
@@ -89,10 +52,10 @@ app.controller("Persons", function($scope) {
 
 
 
-app.controller("Questions", function($scope, $filter, $routeParams) {
-	$scope.question_index = $routeParams.question_index || undefined;
-	$scope.questions = data.questions;
-	$scope.types = data.settings.question_types;
+app.controller("Questions", function($scope, $filter, $routeParams, theService) {
+	$scope.qId = $routeParams.qId || undefined;
+	$scope.questions = theService.data.questions;
+	$scope.types = theService.data.settings.question_types;
 	$scope.question = {
 		id: "",
 		text: "",
@@ -108,41 +71,30 @@ app.controller("Questions", function($scope, $filter, $routeParams) {
 	$scope.cancel = function() {
 	}
 	$scope.delete = function() {
-		$scope.questions.splice($scope.question_index, 1);
+		$scope.questions.splice($scope.questions._find("id", $scope.qId, true), 1);
 	}
-	$scope.$watch("questions.length", function(newValue, oldValue) {
-		if (newValue<oldValue) {
-			if ($scope.question_index===0) {
-				$scope.question = $scope.questions[0];
-			} else {
-				$scope.question_index-=1;
-			}
-		}
-		if (newValue>oldValue) $scope.question_index = newValue-1;
-	})
-	$scope.$watch("question_index", function(newValue, oldValue) {
+	$scope.$watch("qId", function(newValue, oldValue) {
 		if (newValue===undefined) return false;
-		$scope.question = $scope.questions[newValue];
-		$routeParams.question_index = $scope.questions[newValue];
+		$scope.question = $scope.questions.filter(function(obj, i) {
+			return obj.id==newValue
+		})[0]
 	})
 	$scope.search = function(property, index) {
 		if ( $scope.questions[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
 })
 
-app.controller("Objections", function($scope, $filter, $routeParams) {
-	$scope.objection_index = $routeParams.objection_index || undefined
-	$scope.objections = data.objections;
-	$scope.model = {
-		objection: {
-			id: function() {
-				return data.objections[data.objections.length-1].id
-			}(),
-			text: ""
-		}
+app.controller("Objections", function($scope, $filter, $routeParams, theService) {
+	$scope.oId = $routeParams.oId || undefined
+	$scope.objections = theService.data.objections;
+	$scope.questions = theService.data.questions;
+	$scope.objection = $scope.objections._find("id", $scope.qId) || {
+		id: "",
+		text: "",
+		questions: []
 	}
 	$scope.delete = function() {
-		$scope.objections.splice($scope.objection_index--, 1);
+		$scope.objections.splice($scope.objections._find("id", $scope.oId, true), 1);
 	}
 	$scope.save = function() {
 		if (!$scope.model.objection) return false;
@@ -150,7 +102,6 @@ app.controller("Objections", function($scope, $filter, $routeParams) {
 	$scope.cancel = function() {
 		$scope.model = angular.copy($scope.initial);
 	}
-	$scope.$root.objections = $scope.model.objections;
 	$scope.add = function() {
 		$scope.objections.push({
 			id: $scope.model.objection.id+=1,
@@ -161,23 +112,14 @@ app.controller("Objections", function($scope, $filter, $routeParams) {
 	$scope.search = function(property, index) {
 		if ( $scope.objections[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
-	var f = function() {
-		var question_ids = data.questions.map(function(obj, i) {
-			return obj.id;
-		})
-		var questions = [];
-		angular.forEach($scope.model.objection.question_list, function(obj, i) {
-			if ( question_ids.indexOf(obj)>-1 ) {
-				questions.push( data.questions[i] );
-			}
-		})
-		return questions;
-	}
-	$scope.questions = f();
-
-	$scope.$watch("objection_index", function(newValue, oldValue) {
+	$scope.$watch("oId", function(newValue, oldValue) {
 		if (newValue===undefined) return false;
-		$scope.model.objection = $scope.objections[newValue];
-		$scope.questions = f();
+		$scope.objection = $scope.objections._find("id", $scope.oId)
+		$scope.objection.questions = $scope.objection ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null
+		if (!$scope.objection) return {
+			id: "",
+			text: "",
+			questions: []
+		}
 	})
 })

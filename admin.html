@@ -21,22 +21,22 @@
 	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
 	<ul class="objections-objections left_column">
 		<li ng-repeat="objection in objections" ng-show="search('text', $index)">
-			<a href="#/objections/{{$index}}" ng-click="$parent.objection_index = $index">
+			<a href="#/objections/{{objection.id}}">
 				{{objection.text}}
 			</a>
 		</li>
-		<li ng-click="modal($event)">Изменить</li>
+		<li>Изменить</li>
 	</ul>
 	<div class="right_column">
 		<p class="header"></p>
 		<p class="text">
-			<span>ID возражения: {{model.objection.id}}</span>
+			<span>ID возражения: {{objection.id}}</span>
 			<br>
-			<textarea name="" id="" cols="30" rows="10" ng-model="model.objection.text"></textarea>
+			<textarea name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
 		</p>
 		<ul>
 			<span>Список вопросов</span>
-			<li ng-repeat="question in questions">{{question.text}}</li>
+			<li ng-repeat="question in objection.questions">{{question.text}}</li>
 		</ul>
 		<p class="footer">
 			<button ng-click="add()">Добавить</button>
@@ -59,19 +59,19 @@
 <script type="text/ng-template" id="persons.html">
 <ul class="persons">
 	<li ng-repeat="person in clients">
-		<a>
+		<a href="#/persons/{{person.id}}">
 			<img src="person.photo">
-			{{person.name}}
+			{{model.name}}
 		</a>
 	</li>
 </ul>
 <div class="person-column left_column">
-	<span>{{person.id}}</span>
-	<img ng-src="{{person.photo}}" alt="">
+	<span>{{model.id}}</span>
+	<img ng-src="{{model.photo}}" alt="">
 	<input type="text" ng-model="person.name">
 	<ul class="person-objections">
 		<span>Список возражений</span>
-		<li ng-repeat="objection in objections" ng-click="$parent.objection = objection"><a href="">{{objection.text}}</a></li>
+		<li ng-repeat="objection in model.objections"><a href="">{{objection.text}}</a></li>
 		<li ng-click="modal($event)"><a>Изменить</a></li>
 	</ul>
 </div>
@@ -102,7 +102,7 @@
 	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
 	<ul class="questions-questions left_column">
 		<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
-			<a href="#/questions/{{$index}}">{{question.text}}</a>
+			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>
 	<div class="right_column">
