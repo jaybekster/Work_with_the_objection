@@ -18,9 +18,9 @@
 
 <script type="text/ng-template" id="objections.html">
 <div class="stroke">
-	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
+	<label>Поиск: <input type="text" ng-model="search.text"></label>
 	<ul class="objections-objections left_column">
-		<li ng-repeat="objection in objections" ng-show="search('text', $index)">
+		<li ng-repeat="objection in objections | filter:search">
 			<a href="#/objections/{{objection.id}}">
 				{{objection.text}}
 			</a>
@@ -96,9 +96,9 @@
 
 <script type="text/ng-template" id="questions.html">
 <div class="stroke">
-	<label>Поиск: <input type="text" ng-model="searchText" ng-init="searchText = ''"></label>
+	<label>Поиск: <input type="text" ng-model="search.text"></label>
 	<ul class="questions-questions left_column">
-		<li class="questions-question" ng-repeat="question in questions" ng-show="search('text', $index)">
+		<li class="questions-question" ng-repeat="question in questions | filter:search">
 			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>

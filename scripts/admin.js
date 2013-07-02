@@ -31,7 +31,7 @@ app.config(function ($routeProvider) {
 
 app.factory('theService', function() {
     return {
-        data : angular.copy( data );
+        data : angular.copy( data )
     };
 });
 
@@ -81,9 +81,6 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService) 
 			return obj.id==newValue
 		})[0]
 	})
-	$scope.search = function(property, index) {
-		if ( $scope.questions[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
-	}
 })
 
 app.controller("Objections", function($scope, $filter, $routeParams, theService) {
@@ -112,9 +109,6 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService)
 			text: $scope.objection.text
 		})
 
-	}
-	$scope.search = function(property, index) {
-		if ( $scope.objections[index][property].search( new RegExp($scope.searchText, "i") )!==-1 ) return true;
 	}
 	$scope.$watch("oId", function(newValue, oldValue) {
 		if (newValue===undefined || newValue===false) return $scope.objection = {
