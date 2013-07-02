@@ -31,7 +31,7 @@ app.config(function ($routeProvider) {
 
 app.factory('theService', function() {
     return {
-        data : angular.copy( data )
+        data : angular.copy( data );
     };
 });
 
