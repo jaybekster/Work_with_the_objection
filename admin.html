@@ -9,10 +9,11 @@
 	</head>
 	<body ng-app="ng">
 		<ul id="menu">
-			<li><a href="#/persons">Клиенты</a></li>
-			<li><a href="#/objections">Возражения</a></li>
-			<li><a href="#/questions">Вопросы</a></li>
-			<li><a href="#/settings">Настройки</a></li>
+			<li><a class="menu-clients" href="#/persons"></a></li>
+			<li><a class="menu-objections" href="#/objections"></a></li>
+			<li><a class="menu-questions" href="#/questions"></a></li>
+			<li><a class="menu-settings" href="#/settings"></a></li>
+			<li class="clearfix"></li>
 		</ul>
 		<div ng-view></div>
 
@@ -96,9 +97,9 @@
 
 <script type="text/ng-template" id="questions.html">
 <div class="stroke">
-	<label>Поиск: <input type="text" ng-model="search.text"></label>
+	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="questions-questions left_column">
-		<li class="questions-question" ng-repeat="question in questions | filter:search">
+		<li class="questions-question border" ng-repeat="question in questions | filter:search">
 			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>
@@ -107,16 +108,16 @@
 		<p class="text">
 			<span>ID вопроса: {{question.id}}</span>
 			<br>
-			<textarea name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
+			<textarea class="border" name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
 			<select name="" id="" ng-model="question.wrong_answer_type">
 				<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
 			</select>
 		</p>
 		<p class="footer">
-			<button ng-click="add()">Добавить</button>
-			<a href="" ng-click="delete()">Удалить</a>
-			<a href="" class="save" ng-click="save()">Сохранить</a>
-			<a href="" class="close" ng-click="close()">Закрыть</a>
+			<a href="" class="save" ng-click="save()"></a>
+			<a href="" class="close" ng-click="close()"></a>
+			<a href="" class="add" ng-click="add()"></button>
+			<a href="" class="delete" ng-click="delete()"></a>
 		</p>
 	</div>
 </div>
