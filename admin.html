@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=8">
+		<link rel="stylesheet" href="styles/normalize.css">
 		<link rel="stylesheet" href="styles/admin.css">
 		<script src="data/data"></script>
 		<script src="scripts/jquery-1.9.1.min.js"></script>
@@ -8,6 +9,9 @@
 		<script src="scripts/admin.js"></script>
 	</head>
 	<body ng-app="ng">
+		<header>
+			<img src="img/image.png" width="124px" height="47px" alt="">
+		</header>
 		<ul id="menu">
 			<li><a class="menu-clients" href="#/persons"></a></li>
 			<li><a class="menu-objections" href="#/objections"></a></li>
@@ -19,25 +23,24 @@
 
 <script type="text/ng-template" id="objections.html">
 <div class="stroke">
-	<label>Поиск: <input type="text" ng-model="search.text"></label>
+	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="objections-objections left_column">
-		<li ng-repeat="objection in objections | filter:search">
+		<li class="border" ng-repeat="objection in objections | filter:search">
 			<a href="#/objections/{{objection.id}}">
 				{{objection.text}}
 			</a>
 		</li>
-		<li>Изменить</li>
 	</ul>
 	<div class="right_column">
 		<p class="header"></p>
 		<p class="text">
 			<span>ID возражения: {{objection.id}}</span>
 			<br>
-			<textarea name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
+			<textarea class="border" name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
 		</p>
 		<ul class="questions-objections" ng-show="objection.questions.length">
 			<span>Список вопросов</span>
-			<li ng-repeat="question in objection.questions">
+			<li class="border" ng-repeat="question in objection.questions">
 				<a href="#/questions/{{question.id}}">{{question.text}}</a>
 			</li>
 		</ul>
@@ -114,10 +117,10 @@
 			</select>
 		</p>
 		<p class="footer">
-			<a href="" class="save" ng-click="save()"></a>
-			<a href="" class="close" ng-click="close()"></a>
-			<a href="" class="add" ng-click="add()"></button>
-			<a href="" class="delete" ng-click="delete()"></a>
+			<a href="" class="save" ng-click="save()">Сохранить</a>
+			<a href="" class="close" ng-click="close()">Отменить</a>
+			<a href="" class="add" ng-click="add()">Добавить</button>
+			<a href="" class="delete" ng-click="delete()">Удалить</a>
 		</p>
 	</div>
 </div>
