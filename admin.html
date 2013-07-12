@@ -12,11 +12,11 @@
 		<header>
 			<img src="img/image.png" width="124px" height="47px" alt="">
 		</header>
-		<ul id="menu">
-			<li><a class="menu-clients" href="#/persons"></a></li>
-			<li><a class="menu-objections" href="#/objections"></a></li>
-			<li><a class="menu-questions" href="#/questions"></a></li>
-			<li><a class="menu-settings" href="#/settings"></a></li>
+		<ul id="menu" ng-controller="Tabs">
+			<li><a class="menu-clients" href="#/persons" ng-click="setActive($event)"></a></li>
+			<li><a class="menu-objections" href="#/objections" ng-click="setActive($event)"></a></li>
+			<li><a class="menu-questions" href="#/questions" ng-click="setActive($event)"></a></li>
+			<li><a class="menu-settings" href="#/settings" ng-click="setActive($event)"></a></li>
 			<li class="clearfix"></li>
 		</ul>
 		<div ng-view></div>

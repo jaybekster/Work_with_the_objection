@@ -17,23 +17,34 @@ var app = angular.module('ng')
 
 app.config(function ($routeProvider) {
     $routeProvider.
-        when("/questions", {controller: "Questions", templateUrl: "questions.html"}).
+        when("/questions", {controller:"Questions", templateUrl: "questions.html"}).
         when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
         when("/objections/:oId", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/persons", {controller: "Persons", templateUrl: "persons.html", resolve: {
-        	 data: ["$q","$timeout",function($pId,$timeout) {
-        	 	$pId= 2;
-        	 }]}}).
+        when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
         when("/persons/:pId", {controller: "Persons", templateUrl: "persons.html"}).
         when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
 });
 
+app.run( function($rootScope, $location) {
+	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
+
+
+	})
+})
+
 app.factory('theService', function() {
     return {
-        data : angular.copy( data )
+    	data : angular.copy( data )
     };
 });
+
+app.controller("Tabs", function($scope) {
+	$scope.setActive = function setActive($e) {
+		angular.element($e.target).parent().parent().find(".active").removeClass("active");
+		angular.element($e.target).addClass("active");
+	}
+})
 
 app.controller("Persons", function($scope, $routeParams, theService) {
 	$scope.person_id = $routeParams.pId || undefined;
