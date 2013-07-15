@@ -24,7 +24,7 @@ app.config(function ($routeProvider) {
         when("/persons/:pId", {controller: "Persons", templateUrl: "persons.html"}).
         when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
-});
+}).value('$anchorScroll', angular.noop);
 
 app.run( function($rootScope, $location) {
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
