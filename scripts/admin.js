@@ -61,11 +61,16 @@ app.controller("Persons", function($scope, $routeParams, theService) {
 
 
 
+app.value("values", {
+	searchObjection: "",
+	searchQuestion: ""
+});
 
 
-
-
-app.controller("Questions", function($scope, $filter, $routeParams, theService) {
+app.controller("Questions", function($scope, $filter, $routeParams, theService, values) {
+	$scope.search = {
+		text: values.searchQuestion
+	}
 	$scope.qId = $routeParams.qId || undefined;
 	$scope.questions = theService.data.questions;
 	$scope.types = theService.data.settings.question_types;
@@ -91,6 +96,9 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService) 
 		$scope.question = $scope.questions.filter(function(obj, i) {
 			return obj.id==newValue
 		})[0]
+	})
+	$scope.$watch("search.text", function(newValue, oldValue) {
+		values.searchQuestion = newValue;
 	})
 })
 
