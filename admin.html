@@ -26,7 +26,7 @@
 	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="objections-objections left_column">
 		<li class="border" ng-repeat="objection in objections | filter:search">
-			<a href="#/objections/{{objection.id}}">
+			<a href="#/objections/{{objection.id}}" ng-shadow="shadow" ng-data="objection">
 				{{objection.text}}
 			</a>
 		</li>
@@ -41,7 +41,7 @@
 		<ul class="questions-objections" ng-show="objection.questions.length">
 			<span>Список вопросов</span>
 			<li class="border" ng-repeat="question in objection.questions">
-				<a href="#/questions/{{question.id}}">{{question.text}}</a>
+				<a href="#/questions/{{question.id}}" ngShadow="shadow" ng-someattr="someattr">{{question.text}}</a>
 			</li>
 		</ul>
 		<p class="footer">
