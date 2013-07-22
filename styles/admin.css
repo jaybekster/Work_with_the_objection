@@ -221,3 +221,9 @@ header {
 	/*background: url(buttons.png) transparent no-repeat 0 0;*/
 	/*background-position: -277px 0;*/
 }
+.isChanged {
+	border-bottom: 1px solid red;
+	border-left: 2px solid red;
+	border-right: 2px solid red;
+	border-top: 2px solid red;
+}

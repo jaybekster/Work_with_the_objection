@@ -67,7 +67,7 @@ app.value("values", {
 });
 
 
-app.controller("Questions", function($scope, $filter, $routeParams, theService, values) {
+app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $rootScope) {
 	$scope.search = {
 		text: values.searchQuestion
 	}
@@ -100,11 +100,22 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 	$scope.$watch("search.text", function(newValue, oldValue) {
 		values.searchQuestion = newValue;
 	})
+	$scope.$watch("question", function(newValue, oldValue) {
+		if (!newValue.id) return false;
+		var question = data.questions._find("id", newValue.id);
+		for (i in question) {
+			if (i==="id" || !newValue.hasOwnProperty(i)) continue;
+			if (newValue[i]!==question[i] && newValue.id===question.id) {
+				$scope['isChanged_'+newValue.id] = true;
+				return false;
+			}
+			$scope['isChanged_'+newValue.id] = false;
+		}
+	}, true)
 })
 
 app.controller("Objections", function($scope, $filter, $routeParams, theService) {
 	$scope.oId = $routeParams.oId || false;
-	console.log($scope.oId)
 	$scope.objections = theService.data.objections;
 	$scope.questions = theService.data.questions;
 	$scope.objection = $scope.objections._find("id", $scope.qId) || {
@@ -140,21 +151,4 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService)
 		if (!$scope.objection) return false;
 		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
 	})
-})
-
-app.directive("ngShadow", function() {
-	return {
-		restrict: "A",
-		scope: {
-			data: "=ngData"
-		},
-		link: function($scope, $element, $attrs) {
-			$scope[$attrs["ngData"]] = $scope.data;
-			$scope.save = function(func) {
-				return function() {
-					func($scope.data)
-				}
-			}($scope.save)
-		}
-	}
 })
