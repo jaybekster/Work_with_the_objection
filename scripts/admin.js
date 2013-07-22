@@ -27,6 +27,7 @@ app.config(function ($routeProvider) {
 }).value('$anchorScroll', angular.noop);
 
 app.run( function($rootScope, $location) {
+	$rootScope.Questions = {};
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 
 
@@ -67,7 +68,7 @@ app.value("values", {
 });
 
 
-app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $rootScope) {
+app.controller("Questions", function($scope, $filter, $routeParams, theService, values) {
 	$scope.search = {
 		text: values.searchQuestion
 	}
@@ -106,10 +107,10 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 		for (i in question) {
 			if (i==="id" || !newValue.hasOwnProperty(i)) continue;
 			if (newValue[i]!==question[i] && newValue.id===question.id) {
-				$scope['isChanged_'+newValue.id] = true;
+				$scope.$parent['isChanged_'+newValue.id] = true;
 				return false;
 			}
-			$scope['isChanged_'+newValue.id] = false;
+			$scope.$parent['isChanged_'+newValue.id] = false;
 		}
 	}, true)
 })

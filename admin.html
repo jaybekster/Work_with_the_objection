@@ -103,9 +103,7 @@
 	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="questions-questions left_column">
 		<li class="questions-question border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}" ng-repeat="question in questions | filter:search">
-			<a href="#/questions/{{question.id}}">
-			{{question.text}} {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}
-			</a>
+			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>
 	<div class="right_column">
