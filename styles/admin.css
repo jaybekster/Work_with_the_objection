@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 span, div, label, li, ul, header, body {
 	margin: 0;
 	padding: 0;
@@ -64,6 +68,9 @@ ul>span {
 	text-align: center;
 	width: 100%;
 	display: inline-block;
+}
+.persons>li {
+	float: left;
 }
 .person-objections>li,
 .questions-objections>li {
@@ -160,7 +167,6 @@ header {
 	width: 100%;
 	padding: 25px 0 0 43px;
 	height: 84px;
-	box-sizing: border-box;
 }
 .menu-clients,
 .menu-objections,
@@ -226,4 +232,7 @@ header {
 	border-left: 2px solid red;
 	border-right: 2px solid red;
 	border-top: 2px solid red;
+}
+.selected {
+	font-weight: bold;
 }

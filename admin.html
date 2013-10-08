@@ -67,22 +67,30 @@
 	<li ng-repeat="person in clients">
 		<a href="#/persons/{{person.id}}">
 			<img src="person.photo">
-			{{model.name}}
+			{{person.name}}
 		</a>
 	</li>
+	<li class="clearfix"></li>
 </ul>
 <div class="person-column left_column">
 	<span>{{model.id}}</span>
-	<img ng-src="{{model.photo}}" alt="">
+	<img width="128px" height="128px" ng-src="{{model.photo}}" alt="" style="float: left; margin-right: 10px;">
 	<input type="text" ng-model="person.name">
+	<p>Лояльность: <input type="text" ng-model="person.loyalty"></p>
 	<ul class="person-objections">
 		<span>Список возражений</span>
-		<li ng-repeat="objection in model.objections"><a href="">{{objection.text}}</a></li>
+		<li ng-repeat="objection in model.objections" ng-click="getQuestions(objection.id)"><a href="">{{objection.text}}</a></li>
 		<li ng-click="modal($event)"><a>Изменить</a></li>
 	</ul>
 </div>
 <div class="right_column">
-	<p class="text">Лояльность: <input type="text" ng-model="person.loyalty"></p>
+	<ul class="person-questions">
+		<span>Список вопросов</span>
+		<li ng-repeat="question in model.questions">
+			<a href="">{{question.text}}</a>
+		</li>
+		<li ng-click="modal($event)"><a>Изменить</a></li>
+	</ul>
 	<p class="textarea" ng-model="person.introduction_text"></p>
 	<p class="textarea" ng-model="person.closing_text"></p>
 	<p class="textarea" ng-model="person.right_closing_text"></p>
@@ -102,7 +110,7 @@
 <div class="stroke">
 	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="questions-questions left_column">
-		<li class="questions-question border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}" ng-repeat="question in questions | filter:search">
+		<li class="questions-question border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}" ng-repeat="question in questions | filter:search"  ng-class="getClass(question.id)">
 			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>

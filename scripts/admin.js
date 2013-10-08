@@ -36,6 +36,7 @@ app.run( function($rootScope, $location) {
 
 app.factory('theService', function() {
     return {
+    	// data : angular.copy( data )
     	data : angular.copy( data )
     };
 });
@@ -56,7 +57,16 @@ app.controller("Persons", function($scope, $routeParams, theService) {
 		name: $scope.person ? $scope.person.name : null,
 		photo: $scope.person ? $scope.person.photo : null,
 		loyalty: $scope.person ? $scope.person.loyalty : null,
-		objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null
+		objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null,
+		questions: []
+	}
+	$scope.getQuestions = function(objection_id) {
+		var objection = theService.data.objections._find('id', objection_id);
+
+		$scope.model.questions = objection.question_list.map(function(id) {
+			var ques = theService.data.questions._find('id', id);
+			if (ques) return ques;
+		})
 	}
 })
 
@@ -68,7 +78,7 @@ app.value("values", {
 });
 
 
-app.controller("Questions", function($scope, $filter, $routeParams, theService, values) {
+app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $location) {
 	$scope.search = {
 		text: values.searchQuestion
 	}
@@ -86,6 +96,11 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 			text: $scope.question.text,
 			wrong_answer_type: $scope.question.wrong_answer_type
 		})
+	}
+	$scope.save = function() {
+		data.questions._find("id", $scope.qId).text = $scope.question.text;
+		data.questions._find("id", $scope.qId).type = $scope.question.type;
+		$scope.$parent['isChanged_'+$scope.qId] = false;
 	}
 	$scope.cancel = function() {
 	}
@@ -113,6 +128,11 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 			$scope.$parent['isChanged_'+newValue.id] = false;
 		}
 	}, true)
+	$scope.getClass = function (qId) {
+		if ($location.path()==='/questions/'+qId) {
+			return 'selected'
+		}
+	};
 })
 
 app.controller("Objections", function($scope, $filter, $routeParams, theService) {
