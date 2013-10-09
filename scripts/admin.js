@@ -21,7 +21,7 @@ app.config(function ($routeProvider) {
         when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
         when("/objections/:oId", {controller: "Objections", templateUrl: "objections.html"}).
         when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
-        when("/persons/:pId", {controller: "Persons", templateUrl: "persons.html"}).
+        when("/persons/:person_id", {controller: "Persons", templateUrl: "persons.html"}).
         when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
         otherwise({redirectTo : "/persons"});
 }).value('$anchorScroll', angular.noop);
@@ -48,24 +48,52 @@ app.controller("Tabs", function($scope) {
 })
 
 app.controller("Persons", function($scope, $routeParams, theService) {
-	$scope.person_id = $routeParams.pId || undefined;
-	$scope.clients = theService.data.clients;
-	$scope.person = theService.data.clients.filter(function(obj, i) { if (obj.id==$scope.person_id) {return obj} })[0]
-	$scope.model = {
-		id: $scope.person_id,
-		name: $scope.person ? $scope.person.name : null,
-		photo: $scope.person ? $scope.person.photo : null,
-		loyalty: $scope.person ? $scope.person.loyalty : null,
-		objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null,
-		questions: []
-	}
+	var data = $scope.data = theService.data;
+	$scope.person_id = $routeParams.person_id || undefined;
+	$scope.clients = data.clients;
+	$scope.$watch('person_id', function(newValue, oldValue) {
+		if ($scope.person_id===undefined) return false;
+		$scope.person = data.clients._find('id', $scope.person_id);
+		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
+			return data.objections.filter(function(obj, ind2) {
+				return obj.id===id;
+			})[0]
+		})
+	})
+	$scope.$watch('person.objection_list', function(newValue, oldValue) {
+		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
+			return data.objections.filter(function(obj, ind2) {
+				return obj.id===id;
+			})[0]
+		})
+	}, true)
+	// $scope.person = $scope.clients.filter(function(obj, i) { if (obj.id==$scope.person_id) {return obj} })[0];
+	// $scope.model = {
+	// 	id: $scope.person_id,
+	// 	name: $scope.person ? $scope.person.name : null,
+	// 	photo: $scope.person ? $scope.person.photo : null,
+	// 	loyalty: $scope.person ? $scope.person.loyalty : null,
+	// 	objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null,
+	// 	questions: []
+	// }
+	$scope.person = data.clients[0];
 	$scope.getQuestions = function(objection_id) {
-		var objection = theService.data.objections._find('id', objection_id);
+		var objection = data.objections._find('id', objection_id);
 
 		$scope.model.questions = objection.question_list.map(function(id) {
-			var ques = theService.data.questions._find('id', id);
+			var ques = data.questions._find('id', id);
 			if (ques) return ques;
 		})
+	}
+	$scope.updateObjectionList = function($e, id) {
+		var checkbox = $e.target,
+				action = (checkbox.checked ? 'add' : 'remove');
+		if (action==='add') {
+			$scope.person.objection_list.push(id);
+		} else {
+			console.log(1)
+			$scope.person.objection_list.splice( $scope.person.objection_list.indexOf(id), 1 );
+		}
 	}
 })
 
