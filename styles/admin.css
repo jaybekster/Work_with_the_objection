@@ -1,7 +1,10 @@
 * {
 	box-sizing: border-box;
 }
-
+html,
+body {
+	height: 100%;
+}
 span, div, label, li, ul, header, body {
 	margin: 0;
 	padding: 0;
@@ -19,6 +22,7 @@ body {
 	background-color: #E1DFE0;
 	width: 100%;
 	background: -webkit-gradient(linear, center top, center bottom, color-stop(0%,#C2C2C2), color-stop(100%,#EBEBEB ));
+	position: relative;
 }
 body>div, #menu {
 	margin: 0 auto;
@@ -36,15 +40,15 @@ body>div {
 body>div:first-of-type {
 	display: block;
 }
-#modal_dialog {
-	display: none;
-}
-#modal_dialog, .modal_dialog {
+.modal {
 	position: absolute;
+	padding: 1em;
 	left: 50%;
 	top: 50%;
 	margin-left: -25%;
+	max-height: 80%;
 	background-color: white;
+	z-index: 1;
 }
 .footer {
 	text-align: center;
