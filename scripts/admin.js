@@ -93,7 +93,6 @@ app.controller("Persons", function($scope, $routeParams, theService, values) {
 		if (action==='add') {
 			$scope.person.objection_list.push(id);
 		} else {
-			console.log(1)
 			$scope.person.objection_list.splice( $scope.person.objection_list.indexOf(id), 1 );
 		}
 	}
@@ -119,7 +118,7 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 			id: $scope.questions[$scope.questions.length-1].id+1,
 			text: $scope.question.text,
 			wrong_answer_type: $scope.question.wrong_answer_type
-		})
+		});
 	}
 	$scope.save = function() {
 		data.questions._find("id", $scope.qId).text = $scope.question.text;
@@ -130,6 +129,7 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 	}
 	$scope.delete = function() {
 		$scope.questions.splice($scope.questions._find("id", $scope.qId, true), 1);
+		$location.path('/questions');
 	}
 	$scope.$watch("qId", function(newValue, oldValue) {
 		if (newValue===undefined) return false;
@@ -163,6 +163,9 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 app.controller("Objections", function($scope, $filter, $routeParams, theService, values, $location) {
 	if (values.selected_objection && !$routeParams.oId && theService.data.questions._find('id', values.selected_objection)) {
 		$location.path('/objections/'+values.selected_objection);
+	}
+	if ($routeParams.oId && !theService.data.questions._find('id', values.selected_objection)) {
+		$location.path('/objections');
 	}
 	$scope.oId = $routeParams.oId || false;
 	$scope.objections = theService.data.objections;

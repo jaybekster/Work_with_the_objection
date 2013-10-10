@@ -104,7 +104,7 @@
 	<ul class="person-objections">
 		<span>Список возражений</span>
 		<li ng-repeat="objection in objections" ng-click="getQuestions(objection.id)"><a href="">{{objection.text}}</a></li>
-		<li ng-click="modal_is_visible = true; objection_list_backup = person.objection_list.slice();"><a>Изменить</a></li>
+		<li ng-show="person.id!=undefined" ng-click="modal_is_visible = true; objection_list_backup = person.objection_list.slice();"><a>Изменить</a></li>
 	</ul>
 </div>
 <div class="right_column">
@@ -113,7 +113,7 @@
 		<li ng-repeat="question in questions">
 			<a href="">{{question.text}}</a>
 		</li>
-		<li ng-click="modal($event)"><a>Изменить</a></li>
+		<li ng-show="questions!=udnefined" ng-click="modal($event)"><a>Изменить</a></li>
 	</ul>
 	<p class="textarea" ng-model="person.introduction_text"></p>
 	<p class="textarea" ng-model="person.closing_text"></p>
