@@ -47,12 +47,24 @@ app.controller("Tabs", function($scope) {
 	}
 })
 
-app.controller("Persons", function($scope, $routeParams, theService) {
+app.value("values", {
+	searchObjection: "",
+	searchQuestion: "",
+	selected_question: null,
+	selected_objection: null,
+	selected_person: null
+});
+
+app.controller("Persons", function($scope, $routeParams, theService, values) {
 	var data = $scope.data = theService.data;
+	if (values.selected_person && !$routeParams.person_id && theService.data.clients._find('person_id', values.selected_person)) {
+		$location.path('/persons/'+values.selected_person);
+	}
 	$scope.person_id = $routeParams.person_id || undefined;
 	$scope.clients = data.clients;
 	$scope.$watch('person_id', function(newValue, oldValue) {
 		if ($scope.person_id===undefined) return false;
+		values.selected_person = newValue;
 		$scope.person = data.clients._find('id', $scope.person_id);
 		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
 			return data.objections.filter(function(obj, ind2) {
@@ -61,26 +73,16 @@ app.controller("Persons", function($scope, $routeParams, theService) {
 		})
 	})
 	$scope.$watch('person.objection_list', function(newValue, oldValue) {
+		if (newValue===undefined) return false;
 		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
 			return data.objections.filter(function(obj, ind2) {
 				return obj.id===id;
 			})[0]
 		})
 	}, true)
-	// $scope.person = $scope.clients.filter(function(obj, i) { if (obj.id==$scope.person_id) {return obj} })[0];
-	// $scope.model = {
-	// 	id: $scope.person_id,
-	// 	name: $scope.person ? $scope.person.name : null,
-	// 	photo: $scope.person ? $scope.person.photo : null,
-	// 	loyalty: $scope.person ? $scope.person.loyalty : null,
-	// 	objections: $scope.person ? $scope.person.objections_list.map(function(obj1,i1) { return theService.data.objections.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : null,
-	// 	questions: []
-	// }
-	$scope.person = data.clients[0];
 	$scope.getQuestions = function(objection_id) {
 		var objection = data.objections._find('id', objection_id);
-
-		$scope.model.questions = objection.question_list.map(function(id) {
+		$scope.questions = objection.question_list.map(function(id) {
 			var ques = data.questions._find('id', id);
 			if (ques) return ques;
 		})
@@ -96,16 +98,6 @@ app.controller("Persons", function($scope, $routeParams, theService) {
 		}
 	}
 })
-
-
-
-app.value("values", {
-	searchObjection: "",
-	searchQuestion: "",
-	selected_question: null,
-	selected_objection: null
-});
-
 
 app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $location) {
 	$scope.search = {
