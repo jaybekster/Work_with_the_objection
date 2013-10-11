@@ -78,14 +78,25 @@
 
 </style>
 <script type="text/ng-template" id="persons.html">
-<div class="modal" ng-show="modal_is_visible">
-	<ul>
-		<li ng-repeat="objection in data.objections">
-			<label><input type="checkbox" ng-checked="person.objection_list.indexOf(objection.id)!==-1" ng-click="updateObjectionList($event, objection.id)">{{objection.id}}. {{objection.text}}</label>
-		</li>
-	</ul>
-	<button ng-click="modal_is_visible = false;">Сохранить</button>
-	<button ng-click="modal_is_visible = false; person.objection_list = objection_list_backup;">Закрыть</butto>
+<div class="modal" ng-show="modal_is_visible.questions || modal_is_visible.objections" ng-init="modal_is_visible = {'questions': false, 'objection': false}">
+	<div ng-show="modal_is_visible.objections">
+		<ul>
+			<li ng-repeat="objection in data.objections">
+				<label><input type="checkbox" ng-checked="person.objection_list.indexOf(objection.id)!==-1" ng-click="updateObjectionList($event, objection.id)">{{objection.id}}. {{objection.text}}</label>
+			</li>
+		</ul>
+		<button ng-click="modal_is_visible.objections = false;">Сохранить</button>
+		<button ng-click="modal_is_visible.objections = false; person.objection_list = objection_list_backup;">Закрыть</butto>
+		</div>
+		<div ng-show="modal_is_visible.questions">
+		<ul>
+			<li ng-repeat="question in data.questions">
+				<label><input type="checkbox" ng-checked="objection.question_list.indexOf(question.id)!==-1" ng-click="updateQuestionList($event, question.id)">{{question.id}}. {{question.text}}</label>
+			</li>
+		</ul>
+		<button ng-click="modal_is_visible.questions = false;">Сохранить</button>
+		<button ng-click="modal_is_visible.questions = false; objection.question_list = question_list_backup;">Закрыть</button>
+	</div>
 </div>
 <ul class="persons">
 	<li ng-repeat="client in clients">
@@ -103,8 +114,10 @@
 	<p>Лояльность: <input type="text" ng-model="person.loyalty"></p>
 	<ul class="person-objections">
 		<span>Список возражений</span>
-		<li ng-repeat="objection in objections" ng-click="getQuestions(objection.id)"><a href="">{{objection.text}}</a></li>
-		<li ng-show="person.id!=undefined" ng-click="modal_is_visible = true; objection_list_backup = person.objection_list.slice();"><a>Изменить</a></li>
+		<li ng-repeat="objection in objections" ng-click="getQuestions(objection.id)">
+			<a href="">{{objection.text}}</a>
+		</li>
+		<li ng-show="person.id!=undefined" ng-click="modal_is_visible.objections = true; objection_list_backup = person.objection_list.slice();"><a>Изменить</a></li>
 	</ul>
 </div>
 <div class="right_column">
@@ -113,7 +126,7 @@
 		<li ng-repeat="question in questions">
 			<a href="">{{question.text}}</a>
 		</li>
-		<li ng-show="questions!=udnefined" ng-click="modal($event)"><a>Изменить</a></li>
+		<li ng-show="questions!=udnefined" ng-click="modal_is_visible.questions = true; question_list_backup = objection.question_list.slice();"><a>Изменить</a></li>
 	</ul>
 	<p class="textarea" ng-model="person.introduction_text"></p>
 	<p class="textarea" ng-model="person.closing_text"></p>

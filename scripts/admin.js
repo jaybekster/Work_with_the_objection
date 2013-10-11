@@ -81,8 +81,8 @@ app.controller("Persons", function($scope, $routeParams, theService, values) {
 		})
 	}, true)
 	$scope.getQuestions = function(objection_id) {
-		var objection = data.objections._find('id', objection_id);
-		$scope.questions = objection.question_list.map(function(id) {
+		$scope.objection = data.objections._find('id', objection_id);
+		$scope.questions = $scope.objection.question_list.map(function(id) {
 			var ques = data.questions._find('id', id);
 			if (ques) return ques;
 		})
@@ -96,6 +96,22 @@ app.controller("Persons", function($scope, $routeParams, theService, values) {
 			$scope.person.objection_list.splice( $scope.person.objection_list.indexOf(id), 1 );
 		}
 	}
+	$scope.updateQuestionList = function($e, id) {
+		var checkbox = $e.target,
+			action = (checkbox.checked ? 'add' : 'remove');
+		if (action==='add') {
+			$scope.objection.question_list.push(id);
+		} else {
+			$scope.objection.question_list.splice( $scope.objection.question_list.indexOf(id), 1 );
+		}
+	}
+	$scope.$watch('objection.question_list', function(newValue, oldValue) {
+		if ( !(newValue || oldValue) ) return false;
+		$scope.questions = $scope.objection.question_list.map(function(id) {
+			var ques = data.questions._find('id', id);
+			if (ques) return ques;
+		})
+	}, true);
 })
 
 app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $location) {
