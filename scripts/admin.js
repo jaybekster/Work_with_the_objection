@@ -55,17 +55,17 @@ app.value("values", {
 	selected_person: null
 });
 
-app.controller("Persons", function($scope, $routeParams, theService, values) {
+app.controller("Persons", function($scope, $routeParams, theService, values, $location) {
 	var data = $scope.data = theService.data;
-	if (values.selected_person && !$routeParams.person_id && theService.data.clients._find('person_id', values.selected_person)) {
+	if (values.selected_person>=0 && !$routeParams.person_id && theService.data.clients._find('id', values.selected_person)) {
 		$location.path('/persons/'+values.selected_person);
 	}
-	$scope.person_id = $routeParams.person_id || undefined;
-	$scope.clients = data.clients;
+	$scope.person_id = $routeParams.person_id ? parseInt($routeParams.person_id, 10) || undefined;
+	$scope.clients = theService.data.clients;
 	$scope.$watch('person_id', function(newValue, oldValue) {
 		if ($scope.person_id===undefined) return false;
-		values.selected_person = newValue;
-		$scope.person = data.clients._find('id', $scope.person_id);
+		$scope.person = theService.data.clients._find('id', $scope.person_id);
+		values.selected_person = $scope.person.id;
 		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
 			return data.objections.filter(function(obj, ind2) {
 				return obj.id===id;
@@ -118,10 +118,10 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 	$scope.search = {
 		text: values.searchQuestion
 	}
-	if (values.selected_question && !$routeParams.qId && theService.data.questions._find('id', values.selected_question)) {
+	if (values.selected_question>=0 && !$routeParams.qId && theService.data.questions._find('id', values.selected_question)) {
 		$location.path('/questions/'+values.selected_question);
 	}
-	$scope.qId = $routeParams.qId || undefined;
+	$scope.qId = $routeParams.qId ? parseInt($routeParams.qId, 10) : undefined;
 	$scope.questions = theService.data.questions;
 	$scope.types = theService.data.settings.question_types;
 	$scope.question = {
@@ -177,13 +177,10 @@ app.controller("Questions", function($scope, $filter, $routeParams, theService, 
 })
 
 app.controller("Objections", function($scope, $filter, $routeParams, theService, values, $location) {
-	if (values.selected_objection && !$routeParams.oId && theService.data.questions._find('id', values.selected_objection)) {
+	$scope.oId = $routeParams.oId ? parseInt($routeParams.oId, 10) : undefined;
+	if (values.selected_objection>=0 && !$routeParams.oId && theService.data.objections._find('id', values.selected_objection)) {
 		$location.path('/objections/'+values.selected_objection);
 	}
-	if ($routeParams.oId && !theService.data.questions._find('id', values.selected_objection)) {
-		$location.path('/objections');
-	}
-	$scope.oId = $routeParams.oId || false;
 	$scope.objections = theService.data.objections;
 	$scope.questions = theService.data.questions;
 	$scope.objection = $scope.objections._find("id", $scope.qId) || {
@@ -195,7 +192,13 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService,
 	$scope.delete = function() {
 		if ($scope.oId === false) return false;
 		$scope.objections.splice($scope.objections._find("id", $scope.oId, true), 1);
-		$scope.oId = false;
+		theService.data.clients.forEach(function(obj) {
+			var index = obj.objection_list.indexOf($scope.oId);
+			if (index!==-1) {
+				obj.objection_list.splice(index, 1);
+			}
+		})
+		$location.path('/objections');
 	}
 	$scope.save = function() {
 		if (!$scope.model.objection) return false;
@@ -208,10 +211,8 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService,
 			id: $scope.objections[$scope.objections.length-1].id,
 			text: $scope.objection.text
 		})
-
 	}
 	$scope.$watch("oId", function(newValue, oldValue) {
-		values.selected_objection = newValue;
 		if (newValue===undefined || newValue===false) return $scope.objection = {
 			id: "",
 			text: "",
@@ -220,14 +221,12 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService,
 		}
 		$scope.objection = $scope.objections._find("id", newValue)
 		if (!$scope.objection) return false;
+		values.selected_objection = newValue;
 		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
 	})
 	$scope.$watch("objection.question_list", function(newValue, oldValue) {
 		if (!$scope.objection) return false;
 		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return $scope.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
-	}, true)
-	$scope.$watch("question_list_backup", function(newValue, oldValue) {
-		console.log($scope.question_list_backup)
 	}, true)
 	$scope.updateQuestionList = function($e, id) {
 		var checkbox = $e.target,
