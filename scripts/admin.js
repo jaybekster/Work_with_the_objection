@@ -10,7 +10,19 @@ Array.prototype._find = function(property, value, pos) {
 	if (pos && objects[0]) return indexes[0];
 	return objects[0] || null;
 }
-
+Array.prototype.max = function(){
+    return Math.max.apply(Math, this);
+};
+function Objection() {
+	var obj =  {
+		id: '',
+		text: '',
+		questions: [],
+		question_list: []
+	};
+	if (typeof arguments[0]==='object')	angular.extend(obj, arguments[0]);
+	return obj;
+}
 var person=data.clients[0]
 
 var app = angular.module('ng')
@@ -60,7 +72,7 @@ app.controller("Persons", function($scope, $routeParams, theService, values, $lo
 	if (values.selected_person>=0 && !$routeParams.person_id && theService.data.clients._find('id', values.selected_person)) {
 		$location.path('/persons/'+values.selected_person);
 	}
-	$scope.person_id = $routeParams.person_id ? parseInt($routeParams.person_id, 10) || undefined;
+	$scope.person_id = $routeParams.person_id ? parseInt($routeParams.person_id, 10) : undefined;
 	$scope.clients = theService.data.clients;
 	$scope.$watch('person_id', function(newValue, oldValue) {
 		if ($scope.person_id===undefined) return false;
@@ -202,16 +214,26 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService,
 	}
 	$scope.save = function() {
 		if (!$scope.model.objection) return false;
+		$scope.$parent['isChanged_'+$scope.oId] = false;
 	}
 	$scope.cancel = function() {
 		$scope.model = angular.copy($scope.initial);
 	}
 	$scope.add = function() {
-		$scope.objections.push({
-			id: $scope.objections[$scope.objections.length-1].id,
-			text: $scope.objection.text
-		})
-	}
+		$scope.objections.push(
+			new Objection({
+				id: $scope.objections[$scope.objections.length-1].id+1
+			})
+		);
+	};
+	$scope.clone = function() {
+		if ($scope.objection.id!==undefined) {
+			$scope.objections.push( angular.copy($scope.objection) );
+			$scope.objections[$scope.objections.length-1].id = $scope.objections.map(function(obj, i) {
+				return obj.id
+			}).max()+1;
+		};
+	};
 	$scope.$watch("oId", function(newValue, oldValue) {
 		if (newValue===undefined || newValue===false) return $scope.objection = {
 			id: "",
@@ -222,11 +244,26 @@ app.controller("Objections", function($scope, $filter, $routeParams, theService,
 		$scope.objection = $scope.objections._find("id", newValue)
 		if (!$scope.objection) return false;
 		values.selected_objection = newValue;
-		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
+		$scope.objection.questions = ($scope.objection.question_list && $scope.objection.question_list.length>0) ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
 	})
+	$scope.$watch('objection', function(newValue, oldValue) {
+		if (!newValue.id) return false;
+		var objection = data.objections._find("id", newValue.id);
+		if (!objection) return false;
+		if (newValue.text!==objection.text || newValue.question_list.join('')!==objection.question_list.join('')) {
+			$scope.$parent['isChanged_'+newValue.id] = true;
+			return false;
+		}
+		$scope.$parent['isChanged_'+newValue.id] = false;
+	}, true)
+	$scope.getClass = function (oId) {
+		if ($location.path()==='/objections/'+oId) {
+			return 'selected'
+		}
+	};
 	$scope.$watch("objection.question_list", function(newValue, oldValue) {
 		if (!$scope.objection) return false;
-		$scope.objection.questions = $scope.objection.question_list.length>0 ? $scope.objection.question_list.map(function(obj1,i1) { return $scope.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
+		$scope.objection.questions = ($scope.objection.question_list && $scope.objection.question_list.length>0) ? $scope.objection.question_list.map(function(obj1,i1) { return $scope.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
 	}, true)
 	$scope.updateQuestionList = function($e, id) {
 		var checkbox = $e.target,

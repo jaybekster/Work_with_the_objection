@@ -37,22 +37,22 @@
 	<button ng-click="modal_is_visible = false; objection.question_list = question_list_backup;">Закрыть</button>
 </div>
 <div class="stroke">
-	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="objections-objections left_column">
-		<li class="border" ng-repeat="objection in objections | filter:search">
+		<li class="border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+objection.id)] }}" ng-repeat="objection in objections | filter:search" ng-class="getClass(objection.id)">
 			<a href="#/objections/{{objection.id}}">
 				{{objection.text}}
 			</a>
 		</li>
 	</ul>
 	<div class="right_column">
+		<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 		<p class="header"></p>
 		<p class="text">
 			<span>ID возражения: {{objection.id}}</span>
 			<br>
 			<textarea class="border" name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
 		</p>
-		<ul class="questions-objections" ng-show="objection.questions.length">
+		<ul class="questions-objections">
 			<span>Список вопросов</span>
 			<li class="border" ng-repeat="question in objection.questions">
 				<a href="#/questions/{{question.id}}">{{question.text}}</a>
@@ -61,6 +61,7 @@
 		</ul>
 		<p class="footer">
 			<button ng-click="add()">Добавить</button>
+			<button ng-click="clone()">Копировать</button>
 			<a href="" ng-click="delete(objection)">Удалить</a>
 			<a href="" class="save" ng-click="save()">Сохранить</a>
 			<a href="" class="close" ng-click="cancel()">Закрыть</a>
@@ -124,7 +125,7 @@
 	<ul class="person-questions">
 		<span>Список вопросов</span>
 		<li ng-repeat="question in questions">
-			<a href="">{{question.text}}</a>
+			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 		<li ng-show="questions!=udnefined" ng-click="modal_is_visible.questions = true; question_list_backup = objection.question_list.slice();"><a>Изменить</a></li>
 	</ul>
@@ -145,13 +146,13 @@
 
 <script type="text/ng-template" id="questions.html">
 <div class="stroke">
-	<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 	<ul class="questions-questions left_column">
 		<li class="questions-question border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}" ng-repeat="question in questions | filter:search"  ng-class="getClass(question.id)">
 			<a href="#/questions/{{question.id}}">{{question.text}}</a>
 		</li>
 	</ul>
 	<div class="right_column">
+		<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
 		<p class="header"></p>
 		<p class="text">
 			<span>ID вопроса: {{question.id}}</span>
