@@ -16,9 +16,10 @@ myApp.directive('autoinput', [function () {
 			})
 		},
 		scope: {
-			model: "=autoinput"
+			model: "=autoinput",
+			placeholder: "@placeholder"
 		},
-		template: "<div><span>{{model}}</span><input type=\"text\" ng-model=\"model\"></div>"
+		template: "<span>{{model.length>0 && model || placeholder}}</span><input type=\"text\" ng-model=\"model\" placeholder=\"{{placeholder}}\">"
 	};
 }])
 
@@ -38,9 +39,10 @@ myApp.directive('autotextarea', [function () {
 			})
 		},
 		scope: {
-			model: "=autotextarea"
+			model: "=autotextarea",
+			placeholder: "@placeholder"
 		},
-		template: "<div><span>{{model}}</span><textarea type=\"text\" ng-model=\"model\"></div>"
+		template: "<span>{{model.length>0 && model || placeholder }}</span><textarea ng-model=\"model\" placeholder=\"{{placeholder}}\">"
 	};
 }])
 

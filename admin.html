@@ -2,6 +2,7 @@
 	<head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=8">
 		<link rel="stylesheet" href="styles/normalize.css">
+		<link rel="stylesheet" href="styles/style.css">
 		<script src="data/data"></script>
 		<script src="scripts/angular.min.js"></script>
 		<script src="scripts/admin.js"></script>
@@ -18,13 +19,13 @@
 				</li>
 			</ul>
 			<div class="info">
-				<div autoinput="current_client.name"></div>
-				<div autotextarea="current_client.introduction_text"></div>
-				<div autotextarea="current_client.closing_text"></div>
-				<div autotextarea="current_client.right_closing_text"></div>
-				<div autotextarea="current_client.wrong_closing_text"></div>
-				<div autoinput="current_client.loyalty"></div>
-				<div autotextarea="current_client.right_final_question"></div>
+				<div class="bordered" autoinput="current_client.name" placeholder="ФИО"></div>
+				<div class="bordered" autotextarea="current_client.introduction_text"></div>
+				<div class="bordered" autotextarea="current_client.closing_text"></div>
+				<div class="bordered" autotextarea="current_client.right_closing_text"></div>
+				<div class="bordered" autotextarea="current_client.wrong_closing_text"></div>
+				<div class="bordered" autoinput="current_client.loyalty | number"></div>
+				<div class="bordered" autotextarea="current_client.right_final_question | number"></div>
 			</div>
 			<ul>
 				<li ng-repeat="objection in current_client.objection_list">{{objection.text}}</li>
