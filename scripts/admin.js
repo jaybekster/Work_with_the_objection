@@ -1,277 +1,111 @@
-Array.prototype._find = function(property, value, pos) {
-	if (!this.length) return false;
-	var indexes = [];
-	var objects = this.filter(function(obj, i) {
-		if (obj[property]==value) {
-			indexes.push(i);
-			return obj
-		}
-	})
-	if (pos && objects[0]) return indexes[0];
-	return objects[0] || null;
-}
-Array.prototype.max = function(){
-    return Math.max.apply(Math, this);
-};
-function Objection() {
-	var obj =  {
-		id: '',
-		text: '',
-		questions: [],
-		question_list: []
-	};
-	if (typeof arguments[0]==='object')	angular.extend(obj, arguments[0]);
-	return obj;
-}
-var person=data.clients[0]
+var myApp = angular.module('myApp', []);
 
-var app = angular.module('ng')
-
-app.config(function ($routeProvider) {
-    $routeProvider.
-        when("/questions", {controller:"Questions", templateUrl: "questions.html"}).
-        when("/objections", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/objections/:oId", {controller: "Objections", templateUrl: "objections.html"}).
-        when("/persons", {controller: "Persons", templateUrl: "persons.html"}).
-        when("/persons/:person_id", {controller: "Persons", templateUrl: "persons.html"}).
-        when("/questions/:qId", {controller: "Questions", templateUrl: "questions.html"}).
-        otherwise({redirectTo : "/persons"});
-}).value('$anchorScroll', angular.noop);
-
-app.run( function($rootScope, $location) {
-	$rootScope.Questions = {};
-	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
-
-	})
-})
-
-app.factory('theService', function() {
-    return {
-    	// data : angular.copy( data )
-    	data : angular.copy( data )
-    };
-});
-
-app.controller("Tabs", function($scope) {
-	$scope.setActive = function setActive($e) {
-		angular.element($e.target).parent().parent().find(".active").removeClass("active");
-		angular.element($e.target).addClass("active");
-	}
-})
-
-app.value("values", {
-	searchObjection: "",
-	searchQuestion: "",
-	selected_question: null,
-	selected_objection: null,
-	selected_person: null
-});
-
-app.controller("Persons", function($scope, $routeParams, theService, values, $location) {
-	var data = $scope.data = theService.data;
-	if (values.selected_person>=0 && !$routeParams.person_id && theService.data.clients._find('id', values.selected_person)) {
-		$location.path('/persons/'+values.selected_person);
-	}
-	$scope.person_id = $routeParams.person_id ? parseInt($routeParams.person_id, 10) : undefined;
-	$scope.clients = theService.data.clients;
-	$scope.$watch('person_id', function(newValue, oldValue) {
-		if ($scope.person_id===undefined) return false;
-		$scope.person = theService.data.clients._find('id', $scope.person_id);
-		values.selected_person = $scope.person.id;
-		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
-			return data.objections.filter(function(obj, ind2) {
-				return obj.id===id;
-			})[0]
-		})
-	})
-	$scope.$watch('person.objection_list', function(newValue, oldValue) {
-		if (newValue===undefined) return false;
-		$scope.objections = $scope.person.objection_list.map(function(id, ind1) {
-			return data.objections.filter(function(obj, ind2) {
-				return obj.id===id;
-			})[0]
-		})
-	}, true)
-	$scope.getQuestions = function(objection_id) {
-		$scope.objection = data.objections._find('id', objection_id);
-		$scope.questions = $scope.objection.question_list.map(function(id) {
-			var ques = data.questions._find('id', id);
-			if (ques) return ques;
-		})
-	}
-	$scope.updateObjectionList = function($e, id) {
-		var checkbox = $e.target,
-				action = (checkbox.checked ? 'add' : 'remove');
-		if (action==='add') {
-			$scope.person.objection_list.push(id);
-		} else {
-			$scope.person.objection_list.splice( $scope.person.objection_list.indexOf(id), 1 );
-		}
-	}
-	$scope.updateQuestionList = function($e, id) {
-		var checkbox = $e.target,
-			action = (checkbox.checked ? 'add' : 'remove');
-		if (action==='add') {
-			$scope.objection.question_list.push(id);
-		} else {
-			$scope.objection.question_list.splice( $scope.objection.question_list.indexOf(id), 1 );
-		}
-	}
-	$scope.$watch('objection.question_list', function(newValue, oldValue) {
-		if ( !(newValue || oldValue) ) return false;
-		$scope.questions = $scope.objection.question_list.map(function(id) {
-			var ques = data.questions._find('id', id);
-			if (ques) return ques;
-		})
-	}, true);
-})
-
-app.controller("Questions", function($scope, $filter, $routeParams, theService, values, $location) {
-	$scope.search = {
-		text: values.searchQuestion
-	}
-	if (values.selected_question>=0 && !$routeParams.qId && theService.data.questions._find('id', values.selected_question)) {
-		$location.path('/questions/'+values.selected_question);
-	}
-	$scope.qId = $routeParams.qId ? parseInt($routeParams.qId, 10) : undefined;
-	$scope.questions = theService.data.questions;
-	$scope.types = theService.data.settings.question_types;
-	$scope.question = {
-		id: "",
-		text: "",
-		wrong_answer_type: ""
-	}
-	$scope.add = function() {
-		$scope.questions.push({
-			id: $scope.questions[$scope.questions.length-1].id+1,
-			text: $scope.question.text,
-			wrong_answer_type: $scope.question.wrong_answer_type
-		});
-	}
-	$scope.save = function() {
-		data.questions._find("id", $scope.qId).text = $scope.question.text;
-		data.questions._find("id", $scope.qId).type = $scope.question.type;
-		$scope.$parent['isChanged_'+$scope.qId] = false;
-	}
-	$scope.cancel = function() {
-	}
-	$scope.delete = function() {
-		$scope.questions.splice($scope.questions._find("id", $scope.qId, true), 1);
-		$location.path('/questions');
-	}
-	$scope.$watch("qId", function(newValue, oldValue) {
-		if (newValue===undefined) return false;
-		$scope.question = $scope.questions.filter(function(obj, i) {
-			values.selected_question = newValue;
-			return obj.id==newValue
-		})[0]
-	})
-	$scope.$watch("search.text", function(newValue, oldValue) {
-		values.searchQuestion = newValue;
-	})
-	$scope.$watch("question", function(newValue, oldValue) {
-		if (!newValue.id) return false;
-		var question = data.questions._find("id", newValue.id);
-		for (i in question) {
-			if (i==="id" || !newValue.hasOwnProperty(i)) continue;
-			if (newValue[i]!==question[i] && newValue.id===question.id) {
-				$scope.$parent['isChanged_'+newValue.id] = true;
-				return false;
-			}
-			$scope.$parent['isChanged_'+newValue.id] = false;
-		}
-	}, true)
-	$scope.getClass = function (qId) {
-		if ($location.path()==='/questions/'+qId) {
-			return 'selected'
-		}
-	};
-})
-
-app.controller("Objections", function($scope, $filter, $routeParams, theService, values, $location) {
-	$scope.oId = $routeParams.oId ? parseInt($routeParams.oId, 10) : undefined;
-	if (values.selected_objection>=0 && !$routeParams.oId && theService.data.objections._find('id', values.selected_objection)) {
-		$location.path('/objections/'+values.selected_objection);
-	}
-	$scope.objections = theService.data.objections;
-	$scope.questions = theService.data.questions;
-	$scope.objection = $scope.objections._find("id", $scope.qId) || {
-		id: "",
-		text: "",
-		questions: [],
-		question_list: []
-	}
-	$scope.delete = function() {
-		if ($scope.oId === false) return false;
-		$scope.objections.splice($scope.objections._find("id", $scope.oId, true), 1);
-		theService.data.clients.forEach(function(obj) {
-			var index = obj.objection_list.indexOf($scope.oId);
-			if (index!==-1) {
-				obj.objection_list.splice(index, 1);
-			}
-		})
-		$location.path('/objections');
-	}
-	$scope.save = function() {
-		if (!$scope.model.objection) return false;
-		$scope.$parent['isChanged_'+$scope.oId] = false;
-	}
-	$scope.cancel = function() {
-		$scope.model = angular.copy($scope.initial);
-	}
-	$scope.add = function() {
-		$scope.objections.push(
-			new Objection({
-				id: $scope.objections[$scope.objections.length-1].id+1
+myApp.directive('autoinput', [function () {
+	return {
+		restrict: 'A',
+		link: function (scope, iElement, iAttrs) {
+			iElement.find('input').css('display', 'none');
+			iElement.bind('click', function() {
+				iElement.find('span').css('display', 'none');
+				iElement.find('input').css('display', 'block');
+				iElement.find('input')[0].focus();
 			})
-		);
+			iElement.find('input').bind('blur', function() {
+				iElement.find('input').css('display', 'none');
+				iElement.find('span').css('display', 'block');
+			})
+		},
+		scope: {
+			model: "=autoinput"
+		},
+		template: "<div><span>{{model}}</span><input type=\"text\" ng-model=\"model\"></div>"
 	};
-	$scope.clone = function() {
-		if ($scope.objection.id!==undefined) {
-			$scope.objections.push( angular.copy($scope.objection) );
-			$scope.objections[$scope.objections.length-1].id = $scope.objections.map(function(obj, i) {
-				return obj.id
-			}).max()+1;
-		};
+}])
+
+myApp.directive('autotextarea', [function () {
+	return {
+		restrict: 'A',
+		link: function (scope, iElement, iAttrs) {
+			iElement.find('textarea').css('display', 'none');
+			iElement.bind('click', function() {
+				iElement.find('span').css('display', 'none');
+				iElement.find('textarea').css('display', 'block');
+				iElement.find('textarea')[0].focus();
+			})
+			iElement.find('textarea').bind('blur', function() {
+				iElement.find('textarea').css('display', 'none');
+				iElement.find('span').css('display', 'block');
+			})
+		},
+		scope: {
+			model: "=autotextarea"
+		},
+		template: "<div><span>{{model}}</span><textarea type=\"text\" ng-model=\"model\"></div>"
 	};
-	$scope.$watch("oId", function(newValue, oldValue) {
-		if (newValue===undefined || newValue===false) return $scope.objection = {
-			id: "",
-			text: "",
-			questions: [],
-			question_list: []
-		}
-		$scope.objection = $scope.objections._find("id", newValue)
-		if (!$scope.objection) return false;
-		values.selected_objection = newValue;
-		$scope.objection.questions = ($scope.objection.question_list && $scope.objection.question_list.length>0) ? $scope.objection.question_list.map(function(obj1,i1) { return theService.data.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
+}])
+
+myApp.factory('Data', [function () {
+	var copied_data = angular.copy(data);
+	copied_data.clients.forEach(function(obj, ind) {
+		obj.final_questions = obj.final_questions.map(function(obj1, ind1){
+			var temp = copied_data.final_questions.filter(function(f, indf) {
+				return f.id===obj1;
+			})
+			if (temp.length===1) return temp[0];
+		})
+		obj.objection_list = obj.objection_list.map(function(obj1, ind1){
+			var temp = copied_data.objections.filter(function(f, indf) {
+				return f.id===obj1;
+			})
+			if (temp.length===1) return temp[0];
+		})
 	})
-	$scope.$watch('objection', function(newValue, oldValue) {
-		if (!newValue.id) return false;
-		var objection = data.objections._find("id", newValue.id);
-		if (!objection) return false;
-		if (newValue.text!==objection.text || newValue.question_list.join('')!==objection.question_list.join('')) {
-			$scope.$parent['isChanged_'+newValue.id] = true;
-			return false;
-		}
-		$scope.$parent['isChanged_'+newValue.id] = false;
-	}, true)
-	$scope.getClass = function (oId) {
-		if ($location.path()==='/objections/'+oId) {
-			return 'selected'
-		}
-	};
-	$scope.$watch("objection.question_list", function(newValue, oldValue) {
-		if (!$scope.objection) return false;
-		$scope.objection.questions = ($scope.objection.question_list && $scope.objection.question_list.length>0) ? $scope.objection.question_list.map(function(obj1,i1) { return $scope.questions.filter(function(obj2, i2) { return obj2.id==obj1 } )[0] }).filter(function(obj){ return obj }) : [];
-	}, true)
-	$scope.updateQuestionList = function($e, id) {
-		var checkbox = $e.target,
-			action = (checkbox.checked ? 'add' : 'remove');
-		if (action==='add') {
-			$scope.objection.question_list.push(id);
-		} else {
-			$scope.objection.question_list.splice( $scope.objection.question_list.indexOf(id), 1 );
+	copied_data.objections.forEach(function(obj, ind) {
+		obj.question_list = obj.question_list.map(function(obj1, ind1) {
+			var temp = copied_data.questions.filter(function(f, indf) {
+				return f.id===obj1;
+			})
+			if (temp.length===1) return temp[0];
+		})
+	})
+	console.info(copied_data);
+	return copied_data;
+}])
+
+function Clients($scope, Data) {
+	$scope.clients = Data.clients;
+	$scope.current_client = Data.clients[0];
+	$scope.add = function() {
+		return $scope.current_client = {
+			id: $scope.clients[$scope.clients.length-1].id+1,
+			name: "",
+			loyalty: undefined,
+			objection_list: [],
+			introduction_text: "",
+			closing_text: "",
+			final_questions: [],
+			right_final_question: undefined,
+			right_closing_text: "",
+			wrong_closing_text: ""
+		};
+	}
+	$scope.delete = function() {
+		var client_id = $scope.current_client.id;
+		var client = $scope.clients.map(function(obj, ind) {
+			if (obj.id === client_id) return ind;
+		}).filter(function(obj, ind) {
+			return obj!==undefined;
+		});
+		if (client.length === 1) {
+			$scope.clients.splice(client[0], 1);
 		}
 	}
-})
+}
+
+function Objections($scope, Data) {
+	$scope.objections = Data.objections;
+}
+
+function Questions($scope, Data) {
+	$scope.questions = Data.questions;
+}

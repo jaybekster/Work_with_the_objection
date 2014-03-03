@@ -2,174 +2,58 @@
 	<head>
 		<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=8">
 		<link rel="stylesheet" href="styles/normalize.css">
-		<link rel="stylesheet" href="styles/admin.css">
 		<script src="data/data"></script>
-		<script src="scripts/jquery-1.9.1.min.js"></script>
 		<script src="scripts/angular.min.js"></script>
 		<script src="scripts/admin.js"></script>
 	</head>
-	<body ng-app="ng">
+	<body ng-app="myApp">
 		<header>
-			<img src="img/image.png" width="124px" height="47px" alt="">
+			<!-- <img src="img/image.png" width="124px" height="47px" alt=""> -->
 		</header>
-		<ul id="menu" ng-controller="Tabs">
-			<li><a class="menu-clients" href="#/persons" ng-click="setActive($event)"></a></li>
-			<li><a class="menu-objections" href="#/objections" ng-click="setActive($event)"></a></li>
-			<li><a class="menu-questions" href="#/questions" ng-click="setActive($event)"></a></li>
-			<li><a class="menu-settings" href="#/settings" ng-click="setActive($event)"></a></li>
-			<li class="clearfix"></li>
-		</ul>
-		<div ng-view></div>
-
-
-
-<script type="text/ng-template" id="objections.html">
-<div class="modal" ng-show="modal_is_visible">
-	<ul>
-		<li ng-repeat="question in questions" ng-class="{
-			removed: question_list_backup.indexOf(question.id)!==-1 && objection.question_list.indexOf(question.id)===-1,
-			added: objection.question_list.indexOf(question.id)!==-1 && question_list_backup.indexOf(question.id)===-1
-		}">
-			<label><input type="checkbox" ng-checked="objection.question_list.indexOf(question.id)!==-1" ng-click="updateQuestionList($event, question.id)">{{question.id}}. {{question.text}}</label>
-		</li>
-	</ul>
-	<button ng-click="modal_is_visible = false;">Сохранить</button>
-	<button ng-click="modal_is_visible = false; objection.question_list = question_list_backup;">Закрыть</button>
-</div>
-<div class="stroke">
-	<ul class="objections-objections left_column">
-		<li class="border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+objection.id)] }}" ng-repeat="objection in objections | filter:search" ng-class="getClass(objection.id)">
-			<a href="#/objections/{{objection.id}}">
-				{{objection.text}}
-			</a>
-		</li>
-	</ul>
-	<div class="right_column">
-		<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
-		<p class="header"></p>
-		<p class="text">
-			<span>ID возражения: {{objection.id}}</span>
-			<br>
-			<textarea class="border" name="" id="" cols="30" rows="10" ng-model="objection.text"></textarea>
-		</p>
-		<ul class="questions-objections">
-			<span>Список вопросов</span>
-			<li class="border" ng-repeat="question in objection.questions">
-				<a href="#/questions/{{question.id}}">{{question.text}}</a>
-			</li>
-			<li ng-click="modal_is_visible = true; question_list_backup = objection.question_list.slice();"><a>Изменить</a></li>
-		</ul>
-		<p class="footer">
-			<button ng-click="add()">Добавить</button>
-			<button ng-click="clone()">Копировать</button>
-			<a href="" ng-click="delete(objection)">Удалить</a>
-			<a href="" class="save" ng-click="save()">Сохранить</a>
-			<a href="" class="close" ng-click="cancel()">Закрыть</a>
-		</p>
-	</div>
-</div>
-</script>
-
-<style>
-	.persons img {
-		display: block;
-		width: 128px;
-		height: 128px;
-	}
-
-</style>
-<script type="text/ng-template" id="persons.html">
-<div class="modal" ng-show="modal_is_visible.questions || modal_is_visible.objections" ng-init="modal_is_visible = {'questions': false, 'objection': false}">
-	<div ng-show="modal_is_visible.objections">
-		<ul>
-			<li ng-repeat="objection in data.objections">
-				<label><input type="checkbox" ng-checked="person.objection_list.indexOf(objection.id)!==-1" ng-click="updateObjectionList($event, objection.id)">{{objection.id}}. {{objection.text}}</label>
-			</li>
-		</ul>
-		<button ng-click="modal_is_visible.objections = false;">Сохранить</button>
-		<button ng-click="modal_is_visible.objections = false; person.objection_list = objection_list_backup;">Закрыть</butto>
+		
+		<div id="clients" ng-controller="Clients">
+			<ul class="">
+				<li ng-repeat="client in clients">
+					<a href="" ng-click="$parent.current_client = client">{{client.name}}</a>
+				</li>
+			</ul>
+			<div class="info">
+				<div autoinput="current_client.name"></div>
+				<div autotextarea="current_client.introduction_text"></div>
+				<div autotextarea="current_client.closing_text"></div>
+				<div autotextarea="current_client.right_closing_text"></div>
+				<div autotextarea="current_client.wrong_closing_text"></div>
+				<div autoinput="current_client.loyalty"></div>
+				<div autotextarea="current_client.right_final_question"></div>
+			</div>
+			<ul>
+				<li ng-repeat="objection in current_client.objection_list">{{objection.text}}</li>
+			</ul>
+			<ul>
+				<li class="add" ng-click="add();">Добавить</li>
+				<li class="delete" ng-click="delete();">Удалить</li>
+				<li class="save">Сохранить</li>
+			</ul>
 		</div>
-		<div ng-show="modal_is_visible.questions">
-		<ul>
-			<li ng-repeat="question in data.questions">
-				<label><input type="checkbox" ng-checked="objection.question_list.indexOf(question.id)!==-1" ng-click="updateQuestionList($event, question.id)">{{question.id}}. {{question.text}}</label>
-			</li>
-		</ul>
-		<button ng-click="modal_is_visible.questions = false;">Сохранить</button>
-		<button ng-click="modal_is_visible.questions = false; objection.question_list = question_list_backup;">Закрыть</button>
-	</div>
-</div>
-<ul class="persons">
-	<li ng-repeat="client in clients">
-		<a href="#/persons/{{client.id}}">
-			<img ng-src="client.photo">
-			{{client.name}}
-		</a>
-	</li>
-	<li class="clearfix"></li>
-</ul>
-<div class="person-column left_column">
-	<span>{{person.id}}</span>
-	<img width="128px" height="128px" ng-src="{{model.photo}}" alt="" style="float: left; margin-right: 10px;">
-	<input type="text" ng-model="person.name">
-	<p>Лояльность: <input type="text" ng-model="person.loyalty"></p>
-	<ul class="person-objections">
-		<span>Список возражений</span>
-		<li ng-repeat="objection in objections" ng-click="getQuestions(objection.id)">
-			<a href="">{{objection.text}}</a>
-		</li>
-		<li ng-show="person.id!=undefined" ng-click="modal_is_visible.objections = true; objection_list_backup = person.objection_list.slice();"><a>Изменить</a></li>
-	</ul>
-</div>
-<div class="right_column">
-	<ul class="person-questions">
-		<span>Список вопросов</span>
-		<li ng-repeat="question in questions">
-			<a href="#/questions/{{question.id}}">{{question.text}}</a>
-		</li>
-		<li ng-show="questions!=udnefined" ng-click="modal_is_visible.questions = true; question_list_backup = objection.question_list.slice();"><a>Изменить</a></li>
-	</ul>
-	<p class="textarea" ng-model="person.introduction_text"></p>
-	<p class="textarea" ng-model="person.closing_text"></p>
-	<p class="textarea" ng-model="person.right_closing_text"></p>
-	<p class="textarea" ng-model="person.wrong_closing_text"></p>
-</div>
-<div id="modal_dialog" ng-style="getModalDialogStyle(item)">
-	<p class="header"></p>
-	<p class="text" habra></p>
-	<p class="footer">
-		<a href="" class="save">Сохранить</a>
-		<a href="" class="close">Закрыть</a>
-	</p>
-</div>
-</script>
+<hr>
+		<div id="objections" ng-controller="Objections">
+			<ul>
+				<li ng-repeat="objection in objections">
+					<a href="" ng-click="$parent.current_objection = objection">{{objection.text}}</a>
+				</li>
+			</ul>
+			<ul>
+				<li ng-repeat="question in current_objection.question_list">{{question.text}}</li>
+			</ul>
+		</div>
+<hr>
+		<div id="questions" ng-controller="Questions">
+			<ul>
+				<li ng-repeat="question in questions">
+					<a href="">{{question.text}}</a>
+				</li>
+			</ul>
+		</div>
 
-<script type="text/ng-template" id="questions.html">
-<div class="stroke">
-	<ul class="questions-questions left_column">
-		<li class="questions-question border {{ {'true': 'isChanged', 'false': ''}[$eval('isChanged_'+question.id)] }}" ng-repeat="question in questions | filter:search"  ng-class="getClass(question.id)">
-			<a href="#/questions/{{question.id}}">{{question.text}}</a>
-		</li>
-	</ul>
-	<div class="right_column">
-		<label>Поиск: <input class="border" type="text" ng-model="search.text"></label>
-		<p class="header"></p>
-		<p class="text">
-			<span>ID вопроса: {{question.id}}</span>
-			<br>
-			<textarea class="border" name="" id="" cols="30" rows="10" ng-model="question.text"></textarea>
-			<select name="" id="" ng-model="question.wrong_answer_type">
-				<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==question.wrong_answer_type">{{value}}</option>
-			</select>
-		</p>
-		<p class="footer">
-			<a href="" class="save" ng-click="save()">Сохранить</a>
-			<a href="" class="close" ng-click="close()">Отменить</a>
-			<a href="" class="add" ng-click="add()">Добавить</button>
-			<a href="" class="delete" ng-click="delete()">Удалить</a>
-		</p>
-	</div>
-</div>
-</script>
 	</body>
 </html>
