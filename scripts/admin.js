@@ -70,11 +70,13 @@ myApp.factory('Data', [function () {
 			if (temp.length===1) return temp[0];
 		})
 	})
+
 	console.info(copied_data);
 	return copied_data;
 }])
 
 function Clients($scope, Data) {
+	z = $scope;
 	$scope.clients = Data.clients;
 	$scope.current_client = Data.clients[0];
 	$scope.add = function() {
@@ -105,9 +107,39 @@ function Clients($scope, Data) {
 }
 
 function Objections($scope, Data) {
+	$scope.questions = Data.questions;
+	$scope.types = Data.settings.question_types;
 	$scope.objections = Data.objections;
+	$scope.current_objection = $scope.objections[0];
+	$scope.findId = function(id, model) {
+		var model = model || $scope.current_objection.question_list;
+		var index = 0;
+		if (model.filter(function(obj, ind) {
+			if (obj.id == id) index = ind;
+			return obj.id == id;
+		}).length===1) {
+			return index;
+		} else {
+			return false;
+		}
+	}
+	$scope.$watch('modal_dialog', function(newValue, oldValue) {
+		if (newValue == true) {
+			$scope.model = angular.copy($scope.current_objection);
+		}
+	})
+	$scope.changeQuestionList = function(question, model) {
+		var index = $scope.findId(question.id, model.question_list);
+		if ( index === false ) {
+			model.question_list.push(question);
+		} else {
+			model.question_list.splice(index, 1);
+		}
+	}
 }
 
 function Questions($scope, Data) {
 	$scope.questions = Data.questions;
+	$scope.types = Data.settings.question_types;
+	$scope.current_question = $scope.questions[0];
 }
