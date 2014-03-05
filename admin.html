@@ -20,11 +20,11 @@
 			</ul>
 			<div class="info">
 				<div class="bordered" autoinput="current_client.name" placeholder="ФИО"></div>
-				<div class="bordered" autotextarea="current_client.introduction_text"></div>
-				<div class="bordered" autotextarea="current_client.closing_text"></div>
-				<div class="bordered" autotextarea="current_client.right_closing_text"></div>
-				<div class="bordered" autotextarea="current_client.wrong_closing_text"></div>
-				<div class="bordered" autoinput="current_client.loyalty | number"></div>
+				<div class="bordered" autotextarea="current_client.introduction_text" placeholder="Вступительное слово менеджера"></div>
+				<div class="bordered" autotextarea="current_client.closing_text" placeholder="Завершающее возражение"></div>
+				<div class="bordered" autotextarea="current_client.right_closing_text" placeholder="Заключительное слово положительное"></div>
+				<div class="bordered" autotextarea="current_client.wrong_closing_text" placeholder="Заключительное слово отрицательное"></div>
+				<div class="bordered" autoinput="current_client.loyalty | number" placeholder="Лояльность"></div>
 				<div class="bordered" autotextarea="current_client.right_final_question | number"></div>
 			</div>
 			<ul>
@@ -46,12 +46,12 @@
 				</ul>
 			</div>
 			<div class="right half">
-				<select name="" id="" model="current_objection.type">
+				<label>Тип возражения: </label><select name="" id="" model="current_objection.type">
 					<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==current_objection.type">{{value}}</option>
 				</select>
 				<div class="bordered" autotextarea="current_objection.text" placeholder="Текст"></div>
-				<div class="bordered" autotextarea="current_objection.right_comment"></div>
-				<div class="bordered" autotextarea="current_objection.wrong_comment"></div>
+				<div class="bordered" autotextarea="current_objection.right_comment" placeholder="Комментарий тьютора при верном ответе"></div>
+				<div class="bordered" autotextarea="current_objection.wrong_comment" placeholder="Комментарий тьютора при неверном ответе"></div>
 				<ul class="radius_list">
 					<li ng-repeat="question in current_objection.question_list">{{question.text}}</li>
 					<li ng-click="modal_dialog = !modal_dialog;">Изменить</li>
