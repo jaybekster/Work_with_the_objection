@@ -1,0 +1,28 @@
+<div id="objections" class="clearfix" ng-controller="Objections">
+	<div class="left half">
+		<ul class="bordered_list">
+			<li ng-repeat="objection in objections" ng-click="$parent.current_objection = objection;" ng-class="objection.id==$parent.current_objection.id && 'selected'">
+				<a href="">{{objection.text}}</a>
+			</li>
+		</ul>
+	</div>
+	<div class="right half">
+		<label>Тип возражения: </label><select name="" id="" model="current_objection.type">
+			<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==current_objection.type">{{value}}</option>
+		</select>
+		<div class="bordered" autotextarea="current_objection.text" placeholder="Текст"></div>
+		<div class="bordered" autotextarea="current_objection.right_comment" placeholder="Комментарий тьютора при верном ответе"></div>
+		<div class="bordered" autotextarea="current_objection.wrong_comment" placeholder="Комментарий тьютора при неверном ответе"></div>
+		<label class="list_title">Список вопросов</label>
+		<ul class="radius_list">
+			<li ng-repeat="question in current_objection.question_list">{{question.text}}</li>
+			<li ng-click="modal_dialog = !modal_dialog;">Изменить</li>
+		</ul>
+	</div>
+	<div class="modal" ng-show="modal_dialog">
+		<label ng-repeat="question in questions">
+			<input type="checkbox" ng-checked="findId(question.id, model.question_list)!==false;" ng-click="changeQuestionList(question, model)">{{question.text}}
+		</label>
+		<button ng-click="current_objection.question_list = model.question_list;">Сохранить</button><button ng-click="modal_dialog = !modal_dialog;">Закрыть</button>
+	</div>
+</div>

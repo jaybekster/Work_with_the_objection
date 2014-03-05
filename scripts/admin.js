@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', []);
+var myApp = angular.module('myApp', ['ngRoute']);
 
 myApp.directive('autoinput', [function () {
 	return {
@@ -65,7 +65,7 @@ myApp.factory('Data', [function () {
 	copied_data.objections.forEach(function(obj, ind) {
 		obj.question_list = obj.question_list.map(function(obj1, ind1) {
 			var temp = copied_data.questions.filter(function(f, indf) {
-				return f.id===obj1;
+				return f.id==obj1;
 			})
 			if (temp.length===1) return temp[0];
 		})
@@ -75,10 +75,34 @@ myApp.factory('Data', [function () {
 	return copied_data;
 }])
 
-function Clients($scope, Data) {
-	z = $scope;
+myApp.config(['$routeProvider', function($routeProvider) {
+	$routeProvider.when('/clients', {
+		templateUrl: 'templates/admin.clients.html'
+	}).when('/clients/:client_id', {
+		templateUrl: 'templates/admin.clients.html'
+	}).when('/objections', {
+		templateUrl: 'templates/admin.objections.html'
+	}).when('/objections/:objection_id', {
+		templateUrl: 'templates/admin.objections.html'
+	}).when('/questions', {
+		templateUrl: 'templates/admin.questions.html'
+	})
+}])
+
+Array.prototype._find = function(value, property) {
+	var array = this.filter(function(obj, ind) {
+		return (property ? obj[property] : obj)==value; 
+	})
+	if (array.length) return array[0];
+	return undefined;
+}
+
+myApp.controller('Clients', function($scope, Data, $routeParams) {
 	$scope.clients = Data.clients;
-	$scope.current_client = Data.clients[0];
+	$scope.current_client =  Data.clients[0];
+	if ( $routeParams.client_id!==undefined && (typeof parseInt($routeParams.client_id, 10)==='number') && $scope.clients._find($routeParams.client_id, 'id') ) {
+		$scope.current_client = $scope.clients._find($routeParams.client_id, 'id');
+	}
 	$scope.add = function() {
 		return $scope.current_client = {
 			id: $scope.clients[$scope.clients.length-1].id+1,
@@ -104,13 +128,16 @@ function Clients($scope, Data) {
 			$scope.clients.splice(client[0], 1);
 		}
 	}
-}
+})
 
-function Objections($scope, Data) {
+myApp.controller('Objections', function($scope, Data, $routeParams) {
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
 	$scope.objections = Data.objections;
 	$scope.current_objection = $scope.objections[0];
+	if ( $routeParams.objection_id!==undefined && (typeof parseInt($routeParams.objection_id, 10)==='number') && $scope.objections._find($routeParams.objection_id, 'id') ) {
+		$scope.current_objection = $scope.objections._find($routeParams.objection_id, 'id');
+	}
 	$scope.findId = function(id, model) {
 		var model = model || $scope.current_objection.question_list;
 		var index = 0;
@@ -136,7 +163,7 @@ function Objections($scope, Data) {
 			model.question_list.splice(index, 1);
 		}
 	}
-}
+})
 
 function Questions($scope, Data) {
 	$scope.questions = Data.questions;

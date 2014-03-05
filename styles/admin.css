@@ -1,6 +1,7 @@
 ul {
 	list-style-type: none;
 	padding: 0;
+	margin: 0;
 }
 a {
 	color: black;
@@ -11,8 +12,13 @@ a {
 	display: table;
 	clear: both;
 }
+* {
+	box-sizing: border-box;
+}
 body {
 	background: #E1DFE0;
+	margin: 0 auto;
+	width: 1024px;
 }
 .bordered_list li {
 	background: white;
@@ -34,6 +40,13 @@ body {
 	bottom: 0;
 	margin: auto;
 }
+.radius_list {
+	border: 1px solid #7E7F81;
+	padding: 5px 0;
+	width: 90%;
+	margin: 0 auto;
+	background: #EBECEE;
+}
 .radius_list li {
 	background: #DFD3C3;
 	border: 1px solid black;
@@ -43,6 +56,7 @@ body {
 	padding: 10px;
 }
 .half {
+	padding: 0 1%;
 	width: 50%;
 }
 div[autotextarea]>textarea,
@@ -54,6 +68,16 @@ div[autoinput]>input {
 	min-height: 1em;
 	margin: 0.5em 0;
 }
+.list_title {
+	color: #2078D2;
+	background: white;
+	padding: 7px 0 7px 20px;
+	width: 100%;
+	display: inline-block;
+	width: #2078D2;
+	border: 1px solid #7E7F81;
+
+}
 .left {
 	float: left;
 }
@@ -61,22 +85,34 @@ div[autoinput]>input {
 	float: right;
 }
 .bordered_list {
+	border: 1px solid #7E7F81;
 	clear: both;
 }
+.overlay {
+	background: url("../img/background-overlay.png") 0 0 repeat;
+	cursor: default;
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+}
 .modal {
-	box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
 	background: white;
 	border: 2px solid #40809D;
-	position: fixed;
-	width: 640px;
-	height: 480px;
-	z-index: 1;
-	top: 0;
 	bottom: 0;
-	right: 0;
+	box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);
+	cursor: default;
+	height: 480px;
 	left: 0;
 	margin: auto;
 	padding: 10px 12px 20px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	width: 640px;
+	z-index: 2;
 }
 .modal label {
 	display: block;
@@ -88,4 +124,21 @@ div[autoinput]>input {
 .bordered_list li.selected:after {
 	border-right: 10px solid #66CC00;
 	border-left: 0;
+}
+#client_list {
+	width: 100%;
+}
+#client_list li {
+	float: left;
+}
+#client_list a {
+	display: block;
+	text-align: center;
+	margin: 0 5px;
+}
+#client_list img {
+	display: block;
+	width: 126px;
+	height: 126px;
+	border: 1px solid black;
 }

@@ -5,81 +5,21 @@
 		<link rel="stylesheet" href="styles/admin.css">
 		<script src="data/data"></script>
 		<script src="scripts/angular.min.js"></script>
+		<script src="scripts/angular-route.min.js"></script>
 		<script src="scripts/admin.js"></script>
 	</head>
 	<body ng-app="myApp">
 		<header>
 			<!-- <img src="img/image.png" width="124px" height="47px" alt=""> -->
 		</header>
-		
-		<div id="clients" class="clearfix" ng-controller="Clients">
-			<ul class="">
-				<li ng-repeat="client in clients">
-					<a href="" ng-click="$parent.current_client = client">{{client.name}}</a>
-				</li>
-			</ul>
-			<div class="info">
-				<div class="bordered" autoinput="current_client.name" placeholder="ФИО"></div>
-				<div class="bordered" autotextarea="current_client.introduction_text" placeholder="Вступительное слово менеджера"></div>
-				<div class="bordered" autotextarea="current_client.closing_text" placeholder="Завершающее возражение"></div>
-				<div class="bordered" autotextarea="current_client.right_closing_text" placeholder="Заключительное слово положительное"></div>
-				<div class="bordered" autotextarea="current_client.wrong_closing_text" placeholder="Заключительное слово отрицательное"></div>
-				<div class="bordered" autoinput="current_client.loyalty | number" placeholder="Лояльность"></div>
-				<div class="bordered" autotextarea="current_client.right_final_question | number"></div>
-			</div>
-			<ul>
-				<li ng-repeat="objection in current_client.objection_list">{{objection.text}}</li>
-			</ul>
-			<ul>
-				<li class="add" ng-click="add();">Добавить</li>
-				<li class="delete" ng-click="delete();">Удалить</li>
-				<li class="save">Сохранить</li>
-			</ul>
-		</div>
-<hr>
-		<div id="objections" class="clearfix" ng-controller="Objections">
-			<div class="left half">
-				<ul class="bordered_list">
-					<li ng-repeat="objection in objections" ng-click="$parent.current_objection = objection;" ng-class="objection.id==$parent.current_objection.id && 'selected'">
-						<a href="">{{objection.text}}</a>
-					</li>
-				</ul>
-			</div>
-			<div class="right half">
-				<label>Тип возражения: </label><select name="" id="" model="current_objection.type">
-					<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==current_objection.type">{{value}}</option>
-				</select>
-				<div class="bordered" autotextarea="current_objection.text" placeholder="Текст"></div>
-				<div class="bordered" autotextarea="current_objection.right_comment" placeholder="Комментарий тьютора при верном ответе"></div>
-				<div class="bordered" autotextarea="current_objection.wrong_comment" placeholder="Комментарий тьютора при неверном ответе"></div>
-				<ul class="radius_list">
-					<li ng-repeat="question in current_objection.question_list">{{question.text}}</li>
-					<li ng-click="modal_dialog = !modal_dialog;">Изменить</li>
-				</ul>
-			</div>
-			<div class="modal" ng-show="modal_dialog">
-				<label ng-repeat="question in questions">
-					<input type="checkbox" ng-checked="findId(question.id, model.question_list)!==false;" ng-click="changeQuestionList(question, model)">{{question.text}}
-				</label>
-				<button ng-click="current_objection.question_list = model.question_list;">Сохранить</button><button ng-click="modal_dialog = !modal_dialog;">Закрыть</button>
-			</div>
-		</div>
-<hr>
-		<div id="questions" class="clearfix" ng-controller="Questions">
-			<div class="left half">
-				<ul class="bordered_list">
-					<li ng-repeat="question in questions" ng-click="$parent.current_question = question;" ng-class="question.id==$parent.current_question.id && 'selected'">
-						<a href="">{{question.text}}</a>
-					</li>
-				</ul>
-			</div>
-			<div class="right half">
-				<div class="bordered" autotextarea="current_question.text" placeholder="Текст"></div>
-				<select name="" id="" model="current_question.type">
-					<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key===current_question.wrong_answer_type">{{value}}</option>
-				</select>
-			</div>
-			<div class="modal" ng-show="modal_dialog"></div>
-		</div>
+		<ul>
+			<li>
+				<a href="#/clients">Клиенты</a>
+				<a href="#/objections">Возражения</a>
+				<a href="#/questions">Вопросы</a>
+				<a href="#/settings">Настройки</a>
+			</li>
+		</ul>
+		<ng-view></ng-view> 
 	</body>
 </html>

@@ -1,0 +1,39 @@
+<div id="clients" class="clearfix" ng-controller="Clients">
+	<ul id="client_list" class="clearfix">
+		<li ng-repeat="client in clients">
+			<a href="" ng-click="$parent.current_client = client">
+				<img src="/avatars/{{client.avatar}}" alt="{{client.name}}">
+				{{client.id}}
+		</li>
+	</ul>
+	<div class="left half">
+		<label class="list_title" for="">Список возражений</label>
+		<ul class="radius_list">
+			<li ng-repeat="objection in current_client.objection_list">{{objection.text}}</li>
+			<li ng-click="modal_dialog = !modal_dialog;">Изменить</li>
+		</ul>
+		<ul>
+			<li class="add" ng-click="add();">Добавить</li>
+			<li class="delete" ng-click="delete();">Удалить</li>
+			<li class="save">Сохранить</li>
+		</ul>
+	</div>
+	<div class="right half">
+		<div class="info">
+			<div class="bordered" autoinput="current_client.name" placeholder="ФИО"></div>
+			<div class="bordered" autotextarea="current_client.introduction_text" placeholder="Вступительное слово менеджера"></div>
+			<div class="bordered" autotextarea="current_client.closing_text" placeholder="Завершающее возражение"></div>
+			<div class="bordered" autotextarea="current_client.right_closing_text" placeholder="Заключительное слово положительное"></div>
+			<div class="bordered" autotextarea="current_client.wrong_closing_text" placeholder="Заключительное слово отрицательное"></div>
+			<div class="bordered" autoinput="current_client.loyalty | number" placeholder="Лояльность"></div>
+			<div class="bordered" autotextarea="current_client.right_final_question | number"></div>
+		</div>
+	</div>
+	<div class="overlay" ng-show="modal_dialog"></div>
+	<div class="modal" ng-show="modal_dialog">
+		<label ng-repeat="question in questions">
+			<input type="checkbox" ng-checked="findId(question.id, model.question_list)!==false;" ng-click="changeQuestionList(question, model)">{{question.text}}
+		</label>
+		<button ng-click="current_objection.question_list = model.question_list;">Сохранить</button><button ng-click="modal_dialog = !modal_dialog;">Закрыть</button>
+	</div>
+</div>
