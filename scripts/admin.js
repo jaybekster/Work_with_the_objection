@@ -105,7 +105,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
 	})
 }])
 
-myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$route', function($scope, Data, $routeParams, $route) {
+myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, Data, $routeParams) {
 	var temp = null;
 	$scope.modal = {
 		is_visible: false,
@@ -169,9 +169,6 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$route', functio
 	$scope.save = function() {
 		Data.clients = angular.copy($scope.clients);
 	}
-	$scope.$watch('current_client.loyalty', function(neww, old) {
-		console.log(12);
-	})
 }])
 
 myApp.controller('Objections', ['$scope', 'Data', '$routeParams', function($scope, Data, $routeParams) {
