@@ -2,7 +2,7 @@
 	<ul id="client_list" class="clearfix">
 		<li ng-repeat="client in clients">
 			<a href="#/clients/{{client.id}}">
-				<img src="/avatars/{{client.avatar}}" alt="{{client.name}}">
+				<img src="{{ {'true': client.avatar, 'false': '/avatars/'+client.avatar}[client.avatar.indexOf('http')==0]}}" alt="{{client.name}}">
 				{{client.id}}
 			</a>
 		</li>

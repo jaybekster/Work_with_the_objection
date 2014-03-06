@@ -38,6 +38,7 @@ data = {
 		id: 0,
 		name: "Иванов Иван Иванович",
 		loyalty: 4,
+		avatar: 'http://www.quickmeme.com/img/37/37d58eec3f40957821ed9704bb747fb74db3dd0a3b657e16a77bfb1840dab7a2.jpg',
 		objection_list: [2,1,3,0],
 		// objection_list: [0,1,2,3],
 		introduction_text: "Приобретая нашу карту \"Банк в кармане\" Вы сможете оплачивать коммунальные платежи, а также любые интернет товары не выходя из дома, хотите оформим карту сейчас...",
@@ -51,6 +52,7 @@ data = {
 		id: 1,
 		name: "Сергеева Нина Ивановна",
 		loyalty: 3,
+		avatar: 'http://1.bp.blogspot.com/-61DvER0Wq38/UXrWENSWSxI/AAAAAAAAFXQ/3Ei8DwI_d_s/s400/cat-tv.jpg',
 		objection_list: [0,1,2,3],
 		introduction_text: "Приобретая нашу карту \"Банк в кармане\" Вы сможете оплачивать коммунальные платежи, а также любые интернет товары не выходя из дома, хотите оформим карту сейчас...",
 		closing_text: "Если бы я действительно понял преимущества Вашей карты, я мог бы ей воспользоваться, но пока сомневаюсь...",
@@ -115,7 +117,7 @@ data = {
 		questions_count: null,
 		easy_mode: false,
 		question_types: {
-			excuse: "отговорка",
+			excuse: "vexation",
 			vexation: "отыгрыш",
 			reason: "причина"
 		},

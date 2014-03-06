@@ -14,9 +14,11 @@
 		</ul>
 	</div>
 	<div class="right half">
-		<label>Тип возражения: </label><select name="" id="" model="current_objection.type">
+		{{types}}. {{current_objection.type}}.
+		<label>Тип возражения:: </label><select ng-model="current_objection.type" ng-options="key for (key, value) in types"></select>
+		<!-- <label>Тип возражения: </label><select name="" id="" model="current_objection.type">
 			<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key==current_objection.type">{{value}}</option>
-		</select>
+		</select> -->
 		<div class="bordered" autotextarea="current_objection.text" placeholder="Текст"></div>
 		<div class="bordered" autotextarea="current_objection.right_comment" placeholder="Комментарий тьютора при верном ответе"></div>
 		<div class="bordered" autotextarea="current_objection.wrong_comment" placeholder="Комментарий тьютора при неверном ответе"></div>
