@@ -119,6 +119,12 @@ data = {
 			vexation: "отыгрыш",
 			reason: "причина"
 		},
-		loyalty_range: [1, 2, 3, 4, 5]
+		loyalty_range: [1, 2, 3, 4, 5],
+		last_ids: {
+			objections: 3,
+			clients: 1,
+			questions: 7,
+			final_questions: 3
+		}
 	}
 }

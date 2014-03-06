@@ -26,6 +26,12 @@ myApp.directive('autoinput', [function () {
 				iElement.find('input').css('display', 'block');
 				iElement.find('input')[0].focus();
 			})
+			iElement.find('input').bind('keyup', function(e) {
+				var key_code = e.which || e.keyCode;
+				if (key_code===27) {
+					this.blur();
+				}
+			})
 			iElement.find('input').bind('blur', function() {
 				iElement.find('input').css('display', 'none');
 				iElement.find('span').css('display', 'block');
@@ -48,6 +54,12 @@ myApp.directive('autotextarea', [function () {
 				iElement.find('span').css('display', 'none');
 				iElement.find('textarea').css('display', 'block');
 				iElement.find('textarea')[0].focus();
+			})
+			iElement.find('textarea').bind('keyup', function(e) {
+				var key_code = e.which || e.keyCode;
+				if (key_code===27) {
+					this.blur();
+				}
 			})
 			iElement.find('textarea').bind('blur', function() {
 				iElement.find('textarea').css('display', 'none');
