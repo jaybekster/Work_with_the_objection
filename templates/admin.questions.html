@@ -2,13 +2,13 @@
 	<div class="left half">
 		<ul class="bordered_list">
 			<li ng-repeat="question in questions" ng-click="$parent.current_question = question;" ng-class="question.id==$parent.current_question.id && 'selected'">
-				<a href="">{{question.text}}</a>
+				<a href="">{{question.id}}. {{question.text}}</a>
 			</li>
 		</ul>
 	</div>
 	<div class="right half">
 		<div class="bordered" autotextarea="current_question.text" placeholder="Текст"></div>
-		<select name="" id="" model="current_question.type">
+		<label>Тип блока при неверном ответе: </label><select name="" id="" model="current_question.type">
 			<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key===current_question.wrong_answer_type">{{value}}</option>
 		</select>
 	</div>

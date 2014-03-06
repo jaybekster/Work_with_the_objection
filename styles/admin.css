@@ -14,6 +14,7 @@ a {
 }
 * {
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
 }
 body {
 	background: #E1DFE0;
@@ -61,6 +62,8 @@ body {
 }
 div[autotextarea]>textarea,
 div[autoinput]>input {
+	max-width: 100%;
+	min-width: 100%;
 	width: 100%;
 }
 .bordered {
@@ -69,14 +72,12 @@ div[autoinput]>input {
 	margin: 0.5em 0;
 }
 .list_title {
-	color: #2078D2;
 	background: white;
+	border: 1px solid #7E7F81;
+	color: #2078D2;
+	display: inline-block;
 	padding: 7px 0 7px 20px;
 	width: 100%;
-	display: inline-block;
-	width: #2078D2;
-	border: 1px solid #7E7F81;
-
 }
 .left {
 	float: left;
@@ -141,4 +142,16 @@ div[autoinput]>input {
 	width: 126px;
 	height: 126px;
 	border: 1px solid black;
+}
+option[value="reason"] {
+	color: white;
+	background: #9BBB59;
+}
+option[value="excuse"] {
+	color: white;
+	background: #4F81BD;
+}
+option[value="vexation"] {
+	color: white;
+	background: #C0504D;
 }

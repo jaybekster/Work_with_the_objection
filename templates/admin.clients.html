@@ -10,8 +10,8 @@
 	<div class="left half">
 		<label class="list_title" for="">Список возражений</label>
 		<ul class="radius_list">
-			<li ng-repeat="objection in current_client.objection_list">{{objection.text}}</li>
-			<li ng-click="modal_dialog = !modal_dialog;">Изменить</li>
+			<li ng-repeat="objection in current_client.objection_list">{{objection.id}}. {{objection.text}}</li>
+			<li ng-click="modal.is_visible = !modal.is_visible; modal.big_data = objections; modal.tiny_data = current_client.objection_list;">Изменить</li>
 		</ul>
 		<ul>
 			<li class="add" ng-click="add();">Добавить</li>
@@ -21,20 +21,29 @@
 	</div>
 	<div class="right half">
 		<div class="info">
+			<label for="">ID клиента: {{current_client.id}}</label>
 			<div class="bordered" autoinput="current_client.name" placeholder="ФИО"></div>
 			<div class="bordered" autotextarea="current_client.introduction_text" placeholder="Вступительное слово менеджера"></div>
 			<div class="bordered" autotextarea="current_client.closing_text" placeholder="Завершающее возражение"></div>
 			<div class="bordered" autotextarea="current_client.right_closing_text" placeholder="Заключительное слово положительное"></div>
 			<div class="bordered" autotextarea="current_client.wrong_closing_text" placeholder="Заключительное слово отрицательное"></div>
+			<label>Лояльность: </label><select name="" id="" model="current_objection.loyalty">
+				<option ng-repeat="value in loyalties" value="{{value}}" ng-selected="value==current_client.loyalty">{{value}}</option>
+			</select>
 			<div class="bordered" autoinput="current_client.loyalty | number" placeholder="Лояльность"></div>
 			<div class="bordered" autotextarea="current_client.right_final_question | number"></div>
 		</div>
+		<label class="list_title">Вопросы к финальному возражению с признаком верности</label>
+		<ul class="radius_list">
+			<li ng-repeat="final_question in current_client.final_questions">{{final_question.id}}. {{final_question.text}}</li>
+			<li ng-click="modal.is_visible = !modal.is_visible; modal.big_data = final_questions; modal.tiny_data = current_client.final_questions;">Изменить</li>
+		</ul>
 	</div>
-	<div class="overlay" ng-show="modal_dialog"></div>
-	<div class="modal" ng-show="modal_dialog">
-		<label ng-repeat="objection in objections">
-			<input type="checkbox" ng-checked="current_client.objection_list._find(objection.id, 'id')!==-1;" ng-click="current_client.objection_list._change(objection, 'id');">{{objection.id}}. {{objection.text}}
+	<div class="overlay" ng-show="modal.is_visible"></div>
+	<div class="modal" ng-show="modal.is_visible">
+		<label ng-repeat="object in modal.big_data">
+			<input type="checkbox" ng-checked="modal.tiny_data._find(object.id, 'id')!==-1;" ng-click="modal.tiny_data._change(object, 'id');">{{object.id}}. {{object.text}}
 		</label>
-		<button ng-click="current_objection.question_list = model.question_list;">Сохранить</button><button ng-click="modal_dialog = !modal_dialog;">Закрыть</button>
+		<button>Сохранить</button><button ng-click="modal.is_visible = !modal.is_visible;">Закрыть</button>
 	</div>
 </div>

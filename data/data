@@ -118,6 +118,7 @@ data = {
 			excuse: "отговорка",
 			vexation: "отыгрыш",
 			reason: "причина"
-		}
+		},
+		loyalty_range: [1, 2, 3, 4, 5]
 	}
 }

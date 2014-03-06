@@ -100,14 +100,23 @@ myApp.config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'templates/admin.objections.html'
 	}).when('/questions', {
 		templateUrl: 'templates/admin.questions.html'
+	}).when('/settings', {
+		templateUrl: 'templates/admin.settings.html'
 	})
 }])
 
 myApp.controller('Clients', function($scope, Data, $routeParams) {
 	var temp = null;
+	$scope.loyalties = Data.settings.loyalty_range;
 	$scope.clients = Data.clients;
 	$scope.objections = Data.objections;
+	$scope.final_questions = Data.final_questions;
 	$scope.current_client =  Data.clients[0];
+	$scope.modal = {
+		is_visible: false,
+		big_data: null,
+		tiny_data: null
+	}
 	$scope.add = function() {
 		return $scope.current_client = {
 			id: $scope.clients[$scope.clients.length-1].id+1,
@@ -184,3 +193,8 @@ function Questions($scope, Data) {
 	$scope.types = Data.settings.question_types;
 	$scope.current_question = $scope.questions[0];
 }
+
+myApp.controller('Settings', ['$scope', 'Data', function ($scope, Data) {
+	console.log(Data);
+	$scope.settings = Data.settings;
+}])
