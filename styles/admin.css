@@ -25,7 +25,6 @@ body {
 	background: white;
 	border: 3px solid grey;
 	margin: 5px 0;
-	padding: 15px 35px 15px 15px;
 	position: relative;
 }
 .bordered_list li:after {
@@ -40,6 +39,10 @@ body {
 	top: 0;
 	bottom: 0;
 	margin: auto;
+}
+.bordered_list li>a {
+	display: block;
+	margin: 15px 35px 15px 15px;
 }
 .radius_list {
 	border: 1px solid #7E7F81;

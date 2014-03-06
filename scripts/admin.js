@@ -105,22 +105,35 @@ myApp.config(['$routeProvider', function($routeProvider) {
 	})
 }])
 
-myApp.controller('Clients', function($scope, Data, $routeParams) {
+myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$route', function($scope, Data, $routeParams, $route) {
 	var temp = null;
+	$scope.modal = {
+		is_visible: false,
+		big_data: null,
+		tiny_data: null,
+		toggle: function(big_data, tiny_data) {
+			this.is_visible = !this.is_visible;
+			if ( this.is_visible ) {
+				this.big_data = big_data;
+				this.backup_data = '$scope.'+tiny_data;
+				this.tiny_data = angular.copy(eval(this.backup_data));
+			}
+			return this.is_visible;
+		},
+		save: function() {
+			eval(this.backup_data+'=this.tiny_data');
+		}
+	}
 	$scope.loyalties = Data.settings.loyalty_range;
 	$scope.clients = Data.clients;
 	$scope.objections = Data.objections;
 	$scope.final_questions = Data.final_questions;
 	$scope.current_client =  Data.clients[0];
-	$scope.modal = {
-		is_visible: false,
-		big_data: null,
-		tiny_data: null
-	}
 	$scope.add = function() {
-		return $scope.current_client = {
+		$scope.current_client = {
 			id: $scope.clients[$scope.clients.length-1].id+1,
 			name: "",
+			avatar: null,
 			loyalty: undefined,
 			objection_list: [],
 			introduction_text: "",
@@ -130,6 +143,8 @@ myApp.controller('Clients', function($scope, Data, $routeParams) {
 			right_closing_text: "",
 			wrong_closing_text: ""
 		};
+		$scope.clients.push($scope.current_client);
+		return $scope.current_client;
 	}
 	$scope.delete = function() {
 		var client_id = $scope.current_client.id;
@@ -151,48 +166,63 @@ myApp.controller('Clients', function($scope, Data, $routeParams) {
 			$scope.add();
 		}
 	}
-})
+	$scope.save = function() {
+		Data.clients = angular.copy($scope.clients);
+	}
+	$scope.$watch('current_client.loyalty', function(neww, old) {
+		console.log(12);
+	})
+}])
 
-myApp.controller('Objections', function($scope, Data, $routeParams) {
+myApp.controller('Objections', ['$scope', 'Data', '$routeParams', function($scope, Data, $routeParams) {
+	$scope.modal = {
+		is_visible: false,
+		big_data: null,
+		tiny_data: null,
+		toggle: function(big_data, tiny_data) {
+			this.is_visible = !this.is_visible;
+			if (this.is_visible) {
+				this.big_data = big_data;
+				this.backup_data = '$scope.'+tiny_data;
+				this.tiny_data = angular.copy(eval(this.backup_data));
+			}
+			return this.is_visible;
+		},	
+		save: function() {
+			eval(this.backup_data+'=this.tiny_data');
+		}
+	}
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
 	$scope.objections = Data.objections;
+	$scope.add = function() {
+		return $scope.current_objection = {
+			id: $scope.objections[$scope.objections.length-1].id+1,
+			type: $scope.types[0],
+			text: '',
+			question_list: [],
+			right_answer: undefined,
+			right_comment: '',
+			wrong_comment: ''
+		}
+	}
 	$scope.current_objection = $scope.objections[0];
-	// if ( $routeParams.objection_id!==undefined && (typeof parseInt($routeParams.objection_id, 10)==='number') && $scope.objections._find($routeParams.objection_id, 'id') ) {
-	// 	$scope.current_objection = $scope.objections._find($routeParams.objection_id, 'id');
-	// }
-	$scope.findId = function(id, model) {
-		var model = model || $scope.current_objection.question_list;
-		var index = 0;
-		if (model.filter(function(obj, ind) {
-			if (obj.id == id) index = ind;
-			return obj.id == id;
-		}).length===1) {
-			return index;
+	$routeParams.objection_id = parseInt($routeParams.objection_id, 10);
+	if ( $routeParams.objection_id!==undefined && typeof $routeParams.objection_id==='number' ) {
+		temp = $scope.objections._find($routeParams.objection_id, 'id');
+		if ( temp!==-1 ) {
+			$scope.current_objection = $scope.objections[temp];
 		} else {
-			return false;
+			$scope.add();
 		}
 	}
-	$scope.$watch('modal_dialog', function(newValue, oldValue) {
-		if (newValue == true) {
-			$scope.model = angular.copy($scope.current_objection);
-		}
-	})
-	$scope.changeQuestionList = function(question, model) {
-		var index = $scope.findId(question.id, model.question_list);
-		if ( index === false ) {
-			model.question_list.push(question);
-		} else {
-			model.question_list.splice(index, 1);
-		}
-	}
-})
+}])
 
-function Questions($scope, Data) {
+myApp.controller('Questions', ['$scope', 'Data',function ($scope, Data) {
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
 	$scope.current_question = $scope.questions[0];
-}
+}])
 
 myApp.controller('Settings', ['$scope', 'Data', function ($scope, Data) {
 	console.log(Data);
