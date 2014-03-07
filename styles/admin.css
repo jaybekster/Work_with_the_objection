@@ -158,3 +158,42 @@ option[value="vexation"] {
 	color: white;
 	background: #C0504D;
 }
+.menu {
+	display: inline-block;
+	text-align: center;
+	width: 100%;
+}
+.menu li {
+	cursor: pointer;
+	display: inline-block;
+}
+.menu li>a {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+.add {
+	width: 138px;
+	height: 44px;
+	color: transparent;
+	background: url("../img/RS-68.png");
+}
+.add:hover {
+	background: url("../img/RS-67.png");	
+}
+.save {
+	background: url("../img/RS-74.png");
+	height: 42px;
+	width: 134px;
+}
+.save:hover {
+	background: url("../img/RS-73.png");
+}
+.delete {
+	background: url("../img/RS-71.png");
+	height: 44px;
+	width: 137px;
+}
+.delete:hover {
+	background: url("../img/RS-70.png");
+}

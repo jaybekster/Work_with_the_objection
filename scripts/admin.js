@@ -137,7 +137,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
 	})
 }])
 
-myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, Data, $routeParams) {
+myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$location', function($scope, Data, $routeParams, $location) {
 	$scope.modal = {
 		is_visible: false,
 		big_data: null,
@@ -155,6 +155,7 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, 
 			eval(this.backup_data+'=this.tiny_data');
 		}
 	}
+	console.log($location);
 	$scope.last_ids = Data.settings.last_ids;
 	$scope.loyalties = Data.settings.loyalty_range;
 	$scope.clients = Data.clients;
@@ -177,13 +178,13 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, 
 	}
 	$scope.delete = function() {
 		var client_id = $scope.current_client.id;
-		var client = $scope.clients.map(function(obj, ind) {
-			if (obj.id === client_id) return ind;
-		}).filter(function(obj, ind) {
-			return obj!==undefined;
-		});
-		if (client.length === 1) {
-			$scope.clients.splice(client[0], 1);
+		var index = $scope.clients._find($scope.current_client.id, 'id');
+		$scope.clients.splice(index, 1);
+		if ( !$scope.clients.length ) {
+			$scope.add();
+		} else {
+			console.log( $scope.clients[index-1] ? 1 : 2 )
+			$location.path( '/clients/' + ($scope.clients[index-1] ? $scope.clients[index-1].id : $scope.clients[index+1].id) );
 		}
 	}
 	if ( $routeParams.client_id ) {

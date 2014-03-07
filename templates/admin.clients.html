@@ -7,18 +7,18 @@
 			</a>
 		</li>
 	</ul>
+	<ul class="menu">
+			<li class="add">
+				<a href="#/clients/{{last_ids.clients+1}}"></a>
+			</li>
+			<li class="delete" ng-click="delete();"></li>
+			<li class="save" ng-click="save();"></li>
+		</ul>
 	<div class="left half">
 		<label class="list_title" for="">Список возражений</label>
 		<ul class="radius_list">
 			<li ng-repeat="objection in current_client.objection_list">{{objection.id}}. {{objection.text}}</li>
 			<li ng-click="modal.toggle(objections, 'current_client.objection_list');">Изменить</li>
-		</ul>
-		<ul>
-			<li class="add">
-				<a href="#/clients/{{clients[clients.length-1].id+1}}">Добавить</a>
-			</li>
-			<li class="delete" ng-click="delete();">Удалить</li>
-			<li class="save" ng-click="save();">Сохранить</li>
 		</ul>
 	</div>
 	<div class="right half">

@@ -1,10 +1,10 @@
 <div id="questions" class="clearfix" ng-controller="Questions">
-	<ul>
-		<li>
-			<a href="#/questions/{{last_ids.questions+1}}">Добавить</a>
+	<ul class="menu">
+		<li class="add">
+			<a href="#/questions/{{last_ids.questions+1}}"></a>
 		</li>
-		<li>Сохранить</li>
-		<li>Удалить</li>
+		<li class="delete" ng-click="delete();"></li>
+		<li class="save" ng-click="save();"></li>
 	</ul>
 	<div class="left half">
 		<ul class="bordered_list">
