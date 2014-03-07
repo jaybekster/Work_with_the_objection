@@ -117,7 +117,7 @@ data = {
 		questions_count: null,
 		easy_mode: false,
 		question_types: {
-			excuse: "vexation",
+			excuse: "отговорка",
 			vexation: "отыгрыш",
 			reason: "причина"
 		},

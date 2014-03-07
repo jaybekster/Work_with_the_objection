@@ -8,9 +8,7 @@
 	</div>
 	<div class="right half">
 		<div class="bordered" autotextarea="current_question.text" placeholder="Текст"></div>
-		<label>Тип блока при неверном ответе: </label><select name="" id="" model="current_question.type">
-			<option ng-repeat="(key, value) in types" value="{{key}}" ng-selected="key===current_question.wrong_answer_type">{{value}}</option>
-		</select>
+		<label>Тип блока при неверном ответе: </label><select name="" id="" ng-model="current_question.wrong_answer_type" ng-options="key as value for (key, value) in types"></select>
 	</div>
 	<div class="modal" ng-show="modal_dialog"></div>
 </div>
