@@ -132,6 +132,16 @@ myApp.config(['$routeProvider', function($routeProvider) {
 				return;
 			}
 		}
+	}).when('/final_questions', {
+		templateUrl: 'templates/admin.final_questions.html'
+	}).when('/final_questions/:question_id', {
+		templateUrl: 'templates/admin.final_questions.html',
+		resolve: {
+			myApp: function($route, $routeParams) {
+				$route.current.params.question_id = parseInt($route.current.params.question_id, 10);
+				return;
+			}
+		}
 	}).when('/settings', {
 		templateUrl: 'templates/admin.settings.html'
 	})
@@ -153,6 +163,7 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$location', func
 		},
 		save: function() {
 			eval(this.backup_data+'=this.tiny_data');
+			console.log( eval(this.backup_data) )
 		}
 	}
 	$scope.last_ids = Data.settings.last_ids;
@@ -170,7 +181,8 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$location', func
 			final_questions: [],
 			right_final_question: null,
 			right_closing_text: "",
-			wrong_closing_text: ""
+			wrong_closing_text: "",
+			objection_list: []
 		};
 		$scope.clients.push($scope.current_client);
 		return $scope.current_client;
@@ -252,6 +264,39 @@ myApp.controller('Objections', ['$scope', 'Data', '$routeParams', '$location', f
 myApp.controller('Questions', ['$scope', 'Data', '$routeParams', '$location', function ($scope, Data, $routeParams, $location) {
 	$scope.last_ids = Data.settings.last_ids;
 	$scope.questions = Data.questions;
+	$scope.types = Data.settings.question_types;
+	$scope.current_question = $scope.questions[0];
+	$scope.add = function() {
+		$scope.current_question = {
+			id: $scope.last_ids.questions+=1,
+			text: '',
+			wrong_answer_type: null
+		}
+		$scope.questions.push( $scope.current_question );
+		return $scope.current_question;
+	}
+	$scope.delete = function() {
+		var question_id = $scope.current_question.id;
+		var index = $scope.questions._find($scope.current_question.id, 'id');
+		$scope.questions.splice(index, 1);
+		if ( !$scope.questions.length ) {
+			$scope.add();
+		} else {
+			$location.path( '/questions/' + ($scope.questions[index-1] ? $scope.questions[index-1].id : $scope.questions[index].id) );
+		}
+	}
+	if ( $routeParams.question_id ) {
+		if ( $scope.questions._find($routeParams.question_id, 'id')!==-1 ) {
+			$scope.current_question = $scope.questions[$scope.questions._find($routeParams.question_id, 'id')];
+		} else {
+			$scope.add();
+		}
+	}
+}])
+
+myApp.controller('Final_Questions', ['$scope', 'Data', '$routeParams', '$location', function ($scope, Data, $routeParams, $location) {
+	$scope.last_ids = Data.settings.last_ids;
+	$scope.questions = Data.final_questions;
 	$scope.types = Data.settings.question_types;
 	$scope.current_question = $scope.questions[0];
 	$scope.add = function() {

@@ -1,0 +1,21 @@
+<div id="questions" class="clearfix" ng-controller="Final_Questions">
+	<ul class="menu">
+		<li class="add">
+			<a href="#/questions/{{last_ids.final_questions+1}}"></a>
+		</li>
+		<li class="delete" ng-click="delete();"></li>
+		<li class="save" ng-click="save();"></li>
+	</ul>
+	<div class="left half">
+		<ul class="bordered_list">
+			<li ng-repeat="question in questions" ng-class="question.id==$parent.current_question.id && 'selected'">
+				<a href="#/questions/{{question.id}}">{{question.id}}. {{question.text}}</a>
+			</li>
+		</ul>
+	</div>
+	<div class="right half">
+		<div class="bordered" autotextarea="current_question.text" placeholder="Текст"></div>
+		<label>Тип блока при неверном ответе: </label><select name="" id="" ng-model="current_question.wrong_answer_type" ng-options="key as value for (key, value) in types"></select>
+	</div>
+	<div class="modal" ng-show="modal_dialog"></div>
+</div>
