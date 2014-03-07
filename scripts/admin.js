@@ -105,20 +105,39 @@ myApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/clients', {
 		templateUrl: 'templates/admin.clients.html'
 	}).when('/clients/:client_id', {
-		templateUrl: 'templates/admin.clients.html'
+		templateUrl: 'templates/admin.clients.html',
+		resolve: {
+			myApp: function($route, $routeParams) {
+				$route.current.params.client_id = parseInt($route.current.params.client_id, 10);
+				return;
+			}
+		}
 	}).when('/objections', {
 		templateUrl: 'templates/admin.objections.html'
 	}).when('/objections/:objection_id', {
-		templateUrl: 'templates/admin.objections.html'
+		templateUrl: 'templates/admin.objections.html',
+		resolve: {
+			myApp: function($route, $routeParams) {
+				$route.current.params.objection_id = parseInt($route.current.params.objection_id, 10);
+				return;
+			}
+		}
 	}).when('/questions', {
 		templateUrl: 'templates/admin.questions.html'
+	}).when('/questions/:question_id', {
+		templateUrl: 'templates/admin.questions.html',
+		resolve: {
+			myApp: function($route, $routeParams) {
+				$route.current.params.question_id = parseInt($route.current.params.question_id, 10);
+				return;
+			}
+		}
 	}).when('/settings', {
 		templateUrl: 'templates/admin.settings.html'
 	})
 }])
 
 myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, Data, $routeParams) {
-	var temp = null;
 	$scope.modal = {
 		is_visible: false,
 		big_data: null,
@@ -136,6 +155,7 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, 
 			eval(this.backup_data+'=this.tiny_data');
 		}
 	}
+	$scope.last_ids = Data.settings.last_ids;
 	$scope.loyalties = Data.settings.loyalty_range;
 	$scope.clients = Data.clients;
 	$scope.objections = Data.objections;
@@ -143,15 +163,12 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, 
 	$scope.current_client =  Data.clients[0];
 	$scope.add = function() {
 		$scope.current_client = {
-			id: $scope.clients[$scope.clients.length-1].id+1,
+			id: $scope.last_ids.clients+=1,
 			name: "",
 			avatar: null,
-			loyalty: undefined,
-			objection_list: [],
-			introduction_text: "",
 			closing_text: "",
 			final_questions: [],
-			right_final_question: undefined,
+			right_final_question: null,
 			right_closing_text: "",
 			wrong_closing_text: ""
 		};
@@ -169,17 +186,12 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', function($scope, 
 			$scope.clients.splice(client[0], 1);
 		}
 	}
-	$routeParams.client_id = parseInt($routeParams.client_id, 10);
-	if ( $routeParams.client_id!==undefined && typeof $routeParams.client_id==='number' ) {
-		temp = $scope.clients._find($routeParams.client_id, 'id');
-		if ( temp!==-1 ) {
-			$scope.current_client = $scope.clients[temp];
+	if ( $routeParams.client_id ) {
+		if ( $scope.clients._find($routeParams.client_id, 'id')!==-1 ) {
+			$scope.current_client = $scope.clients[$scope.clients._find($routeParams.client_id, 'id')];
 		} else {
 			$scope.add();
 		}
-	}
-	$scope.save = function() {
-		Data.clients = angular.copy($scope.clients);
 	}
 }])
 
@@ -201,36 +213,56 @@ myApp.controller('Objections', ['$scope', 'Data', '$routeParams', function($scop
 			eval(this.backup_data+'=this.tiny_data');
 		}
 	}
+	$scope.last_ids = Data.settings.last_ids;
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
 	$scope.objections = Data.objections;
+	$scope.current_objection = $scope.objections[0];
 	$scope.add = function() {
-		return $scope.current_objection = {
-			id: $scope.objections[$scope.objections.length-1].id+1,
-			type: $scope.types[0],
+		$scope.current_objection = {
+			id: $scope.last_ids.objections+=1,
+			type: null,
 			text: '',
 			question_list: [],
-			right_answer: undefined,
+			right_answer: null,
 			right_comment: '',
 			wrong_comment: ''
 		}
+		$scope.objections.push( $scope.current_objection );
+		console.info( $scope.objections )
+		return $scope.current_objection;
 	}
-	$scope.current_objection = $scope.objections[0];
-	$routeParams.objection_id = parseInt($routeParams.objection_id, 10);
-	if ( $routeParams.objection_id!==undefined && typeof $routeParams.objection_id==='number' ) {
-		temp = $scope.objections._find($routeParams.objection_id, 'id');
-		if ( temp!==-1 ) {
-			$scope.current_objection = $scope.objections[temp];
+	if ( $routeParams.objection_id ) {
+		if ( $scope.objections._find($routeParams.objection_id, 'id')!==-1 ) {
+			$scope.current_objection = $scope.objections[$scope.objections._find($routeParams.objection_id, 'id')];
 		} else {
+			console.info( 'oops' )
 			$scope.add();
 		}
 	}
 }])
 
-myApp.controller('Questions', ['$scope', 'Data',function ($scope, Data) {
+myApp.controller('Questions', ['$scope', 'Data', '$routeParams', function ($scope, Data, $routeParams) {
+	$scope.last_ids = Data.settings.last_ids;
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
+	$scope.add = function() {
+		$scope.current_question = {
+			id: $scope.last_ids.questions+=1,
+			text: '',
+			wrong_answer_type: null
+		}
+		$scope.questions.push( $scope.current_question );
+		return $scope.current_question;
+	}
 	$scope.current_question = $scope.questions[0];
+	if ( $routeParams.question_id ) {
+		if ( $scope.questions._find($routeParams.question_id, 'id')!==-1 ) {
+			$scope.current_question = $scope.questions[$scope.questions._find($routeParams.question_id, 'id')];
+		} else {
+			$scope.add();
+		}
+	}
 }])
 
 myApp.controller('Settings', ['$scope', 'Data', function ($scope, Data) {

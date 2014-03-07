@@ -42,7 +42,7 @@ body {
 }
 .bordered_list li>a {
 	display: block;
-	margin: 15px 35px 15px 15px;
+	padding: 15px 35px 15px 15px;
 }
 .radius_list {
 	border: 1px solid #7E7F81;
