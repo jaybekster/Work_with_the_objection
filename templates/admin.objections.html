@@ -9,7 +9,7 @@
 	<div class="left half">
 		<ul class="bordered_list">
 			<li ng-repeat="objection in objections" ng-class="objection.id==$parent.current_objection.id && 'selected'">
-				<a href="#/objections/{{objection.id}}">{{objection.id}}. {{objection.text}}</a>
+				<a name="{{objection.id}}" href="#/objections/{{objection.id}}">{{objection.id}}. {{objection.text}}</a>
 			</li>
 		</ul>
 	</div>

@@ -9,7 +9,7 @@
 	<div class="left half">
 		<ul class="bordered_list">
 			<li ng-repeat="question in questions" ng-class="question.id==$parent.current_question.id && 'selected'">
-				<a href="#/questions/{{question.id}}">{{question.id}}. {{question.text}}</a>
+				<a name="{{question.id}}" href="#/questions/{{question.id}}">{{question.id}}. {{question.text}}</a>
 			</li>
 		</ul>
 	</div>

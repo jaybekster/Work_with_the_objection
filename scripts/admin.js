@@ -74,6 +74,13 @@ myApp.directive('autotextarea', [function () {
 	};
 }])
 
+myApp.value('last_visits', {
+	client: null,
+	objection: null,
+	question: null,
+	finalQuestion: null
+})
+
 myApp.factory('Data', [function () {
 	var copied_data = angular.copy(data);
 	copied_data.clients.forEach(function(obj, ind) {
@@ -103,42 +110,74 @@ myApp.factory('Data', [function () {
 
 myApp.config(['$routeProvider', function($routeProvider) {
 	$routeProvider.when('/clients', {
-		templateUrl: 'templates/admin.clients.html'
+		templateUrl: 'templates/admin.clients.html',
+		resolve: {
+			myApp: function($location, last_visits) {
+				if ( last_visits.client!==null ) {
+					$location.path('/clients/'+last_visits.client);
+				}
+			}
+		}
 	}).when('/clients/:client_id', {
 		templateUrl: 'templates/admin.clients.html',
 		resolve: {
-			myApp: function($route, $routeParams) {
+			myApp: function($route, $routeParams, last_visits) {
 				$route.current.params.client_id = parseInt($route.current.params.client_id, 10);
+				last_visits.client = $route.current.params.client_id;
 				return;
 			}
 		}
 	}).when('/objections', {
-		templateUrl: 'templates/admin.objections.html'
+		templateUrl: 'templates/admin.objections.html',
+		resolve: {
+			myApp: function($location, last_visits) {
+				if ( last_visits.objection!==null ) {
+					$location.path('/objections/'+last_visits.objection);
+				}
+			}
+		}
 	}).when('/objections/:objection_id', {
 		templateUrl: 'templates/admin.objections.html',
 		resolve: {
-			myApp: function($route, $routeParams) {
+			myApp: function($route, $routeParams, last_visits) {
 				$route.current.params.objection_id = parseInt($route.current.params.objection_id, 10);
+				last_visits.objection = $route.current.params.objection_id;
 				return;
 			}
 		}
 	}).when('/questions', {
-		templateUrl: 'templates/admin.questions.html'
+		templateUrl: 'templates/admin.questions.html',
+		resolve: {
+			myApp: function($location, last_visits) {
+				if ( last_visits.question!==null ) {
+					$location.path('/questions/'+last_visits.question);
+				}
+			}
+		}
 	}).when('/questions/:question_id', {
 		templateUrl: 'templates/admin.questions.html',
 		resolve: {
-			myApp: function($route, $routeParams) {
+			myApp: function($route, $routeParams, last_visits) {
 				$route.current.params.question_id = parseInt($route.current.params.question_id, 10);
+				last_visits.question = $route.current.params.question_id;
 				return;
 			}
 		}
 	}).when('/final_questions', {
-		templateUrl: 'templates/admin.final_questions.html'
+		templateUrl: 'templates/admin.final_questions.html',
+		resolve: {
+			myApp: function($location, last_visits) {
+				if ( last_visits.finalQuestion!==null ) {
+					$location.path('/final_questions/'+last_visits.finalQuestion);
+				}
+			}
+		}
 	}).when('/final_questions/:question_id', {
 		templateUrl: 'templates/admin.final_questions.html',
 		resolve: {
-			myApp: function($route, $routeParams) {
+			myApp: function($route, $routeParams, last_visits) {
 				$route.current.params.question_id = parseInt($route.current.params.question_id, 10);
+				last_visits.finalQuestion = $route.current.params.question_id;
 				return;
 			}
 		}
@@ -163,7 +202,6 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$location', func
 		},
 		save: function() {
 			eval(this.backup_data+'=this.tiny_data');
-			console.log( eval(this.backup_data) )
 		}
 	}
 	$scope.last_ids = Data.settings.last_ids;
@@ -206,7 +244,7 @@ myApp.controller('Clients', ['$scope', 'Data', '$routeParams', '$location', func
 	}
 }])
 
-myApp.controller('Objections', ['$scope', 'Data', '$routeParams', '$location', function($scope, Data, $routeParams, $location) {
+myApp.controller('Objections', ['$scope', 'Data', '$routeParams', '$location', '$anchorScroll', function($scope, Data, $routeParams, $location, $anchorScroll) {
 	$scope.modal = {
 		is_visible: false,
 		big_data: null,
@@ -259,9 +297,11 @@ myApp.controller('Objections', ['$scope', 'Data', '$routeParams', '$location', f
 			$scope.add();
 		}
 	}
+	$location.hash($scope.current_objection.id);
+	$anchorScroll();
 }])
 
-myApp.controller('Questions', ['$scope', 'Data', '$routeParams', '$location', function ($scope, Data, $routeParams, $location) {
+myApp.controller('Questions', ['$scope', 'Data', '$routeParams', '$location', '$anchorScroll', function ($scope, Data, $routeParams, $location, $anchorScroll) {
 	$scope.last_ids = Data.settings.last_ids;
 	$scope.questions = Data.questions;
 	$scope.types = Data.settings.question_types;
@@ -292,9 +332,11 @@ myApp.controller('Questions', ['$scope', 'Data', '$routeParams', '$location', fu
 			$scope.add();
 		}
 	}
+	$location.hash($scope.current_question.id);
+	$anchorScroll();
 }])
 
-myApp.controller('Final_Questions', ['$scope', 'Data', '$routeParams', '$location', function ($scope, Data, $routeParams, $location) {
+myApp.controller('Final_Questions', ['$scope', 'Data', '$routeParams', '$location', '$anchorScroll', function ($scope, Data, $routeParams, $location, $anchorScroll) {
 	$scope.last_ids = Data.settings.last_ids;
 	$scope.questions = Data.final_questions;
 	$scope.types = Data.settings.question_types;
@@ -325,6 +367,8 @@ myApp.controller('Final_Questions', ['$scope', 'Data', '$routeParams', '$locatio
 			$scope.add();
 		}
 	}
+	$location.hash($scope.current_question.id);
+	$anchorScroll();
 }])
 
 myApp.controller('Settings', ['$scope', 'Data', function ($scope, Data) {
