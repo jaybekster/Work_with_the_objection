@@ -374,3 +374,32 @@ myApp.controller('Final_Questions', ['$scope', 'Data', '$routeParams', '$locatio
 myApp.controller('Settings', ['$scope', 'Data', function ($scope, Data) {
 	$scope.settings = Data.settings;
 }])
+
+myApp.controller('Root_Controller', ['$scope', '$http', 'Data', function ($scope, $http, Data) {
+	$scope.save = function() {
+		var data = angular.copy(Data);
+		data.objections.forEach(function(obj) {
+			obj.question_list = obj.question_list.map(function(obj) {
+				return obj.id
+			})
+		})
+		data.clients.forEach(function(obj) {
+			obj.objection_list = obj.objection_list.map(function(obj) {
+				return obj.id
+			})
+			obj.final_questions = obj.final_questions.map(function(obj) {
+				return obj.id
+			})
+		})
+		console.dir(data);
+		$http({
+			method: 'POST',
+			url: 'backend.php',
+			data: angular.toJson(data)
+		}).success(function(data, status) {
+			alert('Сохранено');
+		}).error(function(data, status) {
+			// alert('Статус ошибки: ' + status);
+		})
+	}
+}])
