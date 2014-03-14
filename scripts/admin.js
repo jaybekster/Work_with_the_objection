@@ -391,7 +391,6 @@ myApp.controller('Root_Controller', ['$scope', '$http', 'Data', function ($scope
 				return obj.id
 			})
 		})
-		console.dir(data);
 		$http({
 			method: 'POST',
 			url: 'backend.php',

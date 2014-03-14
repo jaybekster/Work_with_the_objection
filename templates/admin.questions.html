@@ -7,8 +7,9 @@
 		<li class="save" ng-click="save();"></li>
 	</ul>
 	<div class="left half">
+		<label>Поиск: <input type="text" ng-model="search.text"></label>
 		<ul class="bordered_list">
-			<li ng-repeat="question in questions" ng-class="question.id==$parent.current_question.id && 'selected'">
+			<li ng-repeat="question in questions | filter:search" ng-class="question.id==$parent.current_question.id && 'selected'">
 				<a name="{{question.id}}" href="#/questions/{{question.id}}">{{question.id}}. {{question.text}}</a>
 			</li>
 		</ul>
