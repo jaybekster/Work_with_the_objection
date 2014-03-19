@@ -1,21 +1,19 @@
 ul {
 	list-style-type: none;
-	padding: 0;
 	margin: 0;
+	padding: 0;
 }
 a {
 	color: black;
-	text-decoration: none;
-}
+	text-decoration: none;}
 .clearfix:after {
+	clear: both;
 	content: "";
 	display: table;
-	clear: both;
 }
 * {
-	box-sizing: border-box;
 	-moz-box-sizing: border-box;
-}
+	box-sizing: border-box;}
 body {
 	background: #E1DFE0;
 	margin: 0 auto;
@@ -25,40 +23,37 @@ body {
 	background: white;
 	border: 3px solid grey;
 	margin: 5px 0;
-	position: relative;
-}
+	position: relative;}
 .bordered_list li:after {
-	content: "";
-	border-top: 10px solid transparent;
-	border-left: 10px solid #666666;
 	border-bottom: 10px solid transparent;
+	border-left: 10px solid #666666;
+	border-top: 10px solid transparent;
+	bottom: 0;
+	content: "";
 	height: 0;
-	width: 0;
+	margin: auto;
 	position: absolute;
 	right: 20px;
 	top: 0;
-	bottom: 0;
-	margin: auto;
+	width: 0;
 }
 .bordered_list li>a {
 	display: block;
-	padding: 15px 35px 15px 15px;
-}
+	padding: 15px 35px 15px 15px;}
 .radius_list {
+	background: #EBECEE;
 	border: 1px solid #7E7F81;
+	margin: 0 auto;
 	padding: 5px 0;
 	width: 90%;
-	margin: 0 auto;
-	background: #EBECEE;
 }
 .radius_list li {
 	background: #DFD3C3;
-	border: 1px solid black;
 	border-radius: 5px;
+	border: 1px solid black;
 	margin: 5px auto;
-	width: 80%;
 	padding: 10px;
-}
+	width: 80%;}
 .half {
 	padding: 0 1%;
 	width: 50%;
@@ -67,12 +62,11 @@ div[autotextarea]>textarea,
 div[autoinput]>input {
 	max-width: 100%;
 	min-width: 100%;
-	width: 100%;
-}
+	width: 100%;}
 .bordered {
 	border: 1px solid black;
-	min-height: 1em;
 	margin: 0.5em 0;
+	min-height: 1em;
 }
 .list_title {
 	background: white;
@@ -80,14 +74,12 @@ div[autoinput]>input {
 	color: #2078D2;
 	display: inline-block;
 	padding: 7px 0 7px 20px;
-	width: 100%;
-}
+	width: 100%;}
 .left {
 	float: left;
 }
 .right {
-	float: right;
-}
+	float: right;}
 .bordered_list {
 	clear: both;
 }
@@ -99,8 +91,7 @@ div[autoinput]>input {
 	position: fixed;
 	top: 0;
 	width: 100%;
-	z-index: 1;
-}
+	z-index: 1;}
 .modal {
 	background: white;
 	border: 2px solid #40809D;
@@ -120,76 +111,67 @@ div[autoinput]>input {
 }
 .modal label {
 	display: block;
-	width: 100%;
-}
+	width: 100%;}
 .bordered_list li.selected {
 	border-color: #66CC00;
 }
 .bordered_list li.selected:after {
-	border-right: 10px solid #66CC00;
 	border-left: 0;
-}
+	border-right: 10px solid #66CC00;}
 #client_list {
 	width: 100%;
 }
 #client_list li {
-	float: left;
-}
+	float: left;}
 #client_list a {
 	display: block;
-	text-align: center;
 	margin: 0 5px;
+	text-align: center;
 }
 #client_list img {
-	display: block;
-	width: 126px;
-	height: 126px;
 	border: 1px solid black;
-}
+	display: block;
+	height: 126px;
+	width: 126px;}
 option[value="reason"] {
-	color: white;
 	background: #9BBB59;
+	color: white;
 }
 option[value="excuse"] {
-	color: white;
 	background: #4F81BD;
-}
+	color: white;}
 option[value="vexation"] {
-	color: white;
 	background: #C0504D;
+	color: white;
 }
 .menu {
 	display: inline-block;
 	text-align: center;
-	width: 100%;
-}
+	width: 100%;}
 .menu li {
-	padding: 0 10px;
 	cursor: pointer;
 	display: inline-block;
+	padding: 0 10px;
 }
 .menu li>a {
 	display: block;
 	height: 100%;
-	width: 100%;
-}
+	width: 100%;}
 .add {
-	width: 138px;
-	height: 44px;
-	color: transparent;
 	background: url("../img/RS-68.png");
+	color: transparent;
+	height: 44px;
+	width: 138px;
 }
 .add:hover {
-	background: url("../img/RS-67.png");	
-}
+	background: url("../img/RS-67.png");	}
 .save {
 	background: url("../img/RS-74.png");
 	height: 42px;
 	width: 134px;
 }
 .save:hover {
-	background: url("../img/RS-73.png");
-}
+	background: url("../img/RS-73.png");}
 .delete {
 	background: url("../img/RS-71.png");
 	height: 44px;
